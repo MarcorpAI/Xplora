@@ -1,0 +1,239 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+body{
+    background-color: black;
+}
+
+.first-nav{
+    position: fixed;
+    top: 10px;
+    bottom: 0;
+    left: 0;
+    width: 70px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* border-right: 0.5px solid white; */
+}
+
+.logo{
+    width: 45px;
+    height: 45px;
+    border-radius: 10px;
+    border-bottom: 50px;
+}
+
+.icon{
+    padding: 10px;
+    color: white;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.icon:hover{
+    /* background-color: blue; */
+    background-color: grey;
+    cursor: pointer;
+}
+
+
+.bottom-content{
+    position: absolute;
+    height: 100%;
+    top: 42%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.main-body{
+    position: fixed;
+    left: 70px;
+    width: 100%;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid rgb(57, 56, 56);
+    /* border-bottom: 1px solid grey; */
+    border-radius: 5px;
+}
+
+.small-sidebar{
+    position: fixed;
+    top: 10px;
+    bottom: 665px;
+    left: 80px;
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgb(19, 18, 18);
+    border: 1px solid rgb(57, 56, 56);
+    /* border-radius: 10px; */
+}
+
+.main-sidebar{
+    position: fixed;
+    top: 190px;
+    bottom: 10px;
+    left: 80px;
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgb(19, 18, 18);
+    border: 1px solid rgb(57, 56, 56);
+    /* border-radius: 10px; */
+}
+
+.chatbox{
+    position: fixed;
+    left: 410px;
+    width: 70rem;
+    top: 10px;
+    bottom: 10px;
+    right: 10px;
+    display: flex;
+    /* flex-direction: column; */
+    align-items: center;
+    background-color: rgb(19, 18, 18);
+    border: 1px solid rgb(57, 56, 56);
+}
+
+
+
+    /* BUTTON */
+.btn{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: white;
+    background-color: rgb(19, 18, 18);
+    outline: none;
+    border: none;
+    /* font-weight: 600; */
+    font-size: 14px;
+    padding-top: 20px;
+    padding-right: 190px;
+    }
+
+    .btn:hover{
+        cursor: cell;
+    }
+
+    .popular{
+        background-color: grey;
+        border: none;
+        outline: none;
+        font-size: 12px;
+        color: white;
+        margin-top: 27px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        width: 300px;
+        border-radius: 5px;
+    }
+
+    .popular:hover{
+        background-color: rgb(98, 97, 97);
+        cursor: pointer;
+    }
+
+    .threads {
+        background-color: rgb(19, 18, 18);
+        border: none;
+        outline: none;
+        font-size: 12px;
+        color: rgb(133, 132, 132);
+        margin-top: 22px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 10px;
+        width: 300px;
+        border-radius: 5px;
+    }
+
+
+/* Chatbox w bugs */
+/* copied code */
+
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 90%;
+    width: 100vh;
+    margin-top: 50px;
+    /* margin-bottom: 100%; */
+    /* overflow-y: scroll; */
+    /* left: 20vh; */
+    margin-left: 90px;
+    margin-bottom: 15px;
+    /* background-color: blue; */
+}
+
+.chat-history {
+    flex: 1;
+    overflow-y: scroll;
+    padding: 10px;
+    /* margin-left: 20px; */
+}
+
+.chat-input {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+#message-input {
+    flex: 1;
+    margin-right: 10px;
+    font-size: 16px;
+    border: 1px solid black;
+    padding: 10px;
+    background-color: black;
+    color: white;
+    border-radius: 10px;
+    padding: none;
+    outline: none;
+}
+
+.iconn-white {
+    cursor: pointer;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 20px;
+    background-color: black;
+    justify-content: center;
+    margin: 0 10px;
+}
+
+
+
+
+
+.textbox{
+    display: inline-flex;
+    text-align: center;
+    align-items: center;
+    gap: 30px;
+    background-color: black;
+    border-radius: 10px;
+    margin-left: 35px;
+}
+
+.textbox input{
+    height: 50px;
+    width: 550px;
+    outline: none;
+    border: none;
+    color: grey;
+}
