@@ -19,16 +19,24 @@ from django.template.response import TemplateResponse
  
 
 
+"""
+basically what every code does here is file upload and file query.....each file has a separate view the first view handles the file upload
+and the second view handles the file interaction. when a file upload is successful...it fetches the query file endpoint where the user passes a prompt
+
+""" 
+
+
+
+
 
 
 class FileInteractionView(APIView):
 
-    template_name = 'main1.html'
+    template_name = 'mainTXT.html'
 
     def get(self, request):
         return TemplateResponse(request, self.template_name)
 
-    @csrf_exempt
     def post(self, request):
         print(request.POST)   # Check POST data
         print(request.FILES)  # Check uploaded files
@@ -49,13 +57,6 @@ class FileInteractionView(APIView):
 
 
 class QueryView(APIView):
-
-    template_name = 'main1.html'
-
-    def get(self, request):
-        return TemplateResponse(request, self.template_name)
-
-
     def post(self, request):
         document = request.FILES.get('file_content')
         query = request.data.get('question')
@@ -84,12 +85,11 @@ class QueryView(APIView):
 
 class DocxView(APIView):
 
-    template_name = 'main1.html'
+    template_name = 'MainDocx.html'
 
     def get(self, request):
         return TemplateResponse(request, self.template_name)
 
-    @csrf_exempt
     def post(self, request):
         print(request.POST)
         print(request.FILES)
@@ -109,6 +109,13 @@ class DocxView(APIView):
 
 
 
+
+
+
+
+
+
+
 # query docx file
 class QueryDocx(APIView):
     def post(self, request):
@@ -117,7 +124,7 @@ class QueryDocx(APIView):
 
         query = str(query)
 
-        # Save the uploaded file to a temporary location on disk
+        # Save the uploaded file to a temporary location on disk(temporary still looking for an alternative means of sving the files)
         fs = FileSystemStorage()
         temp_file_path = fs.save(document.name, document)
 
@@ -136,9 +143,22 @@ class QueryDocx(APIView):
 
 
 
+
+
+
+
+
+
+
+
 # this is the file upload for pdf
 class PDFView(APIView):
-    @csrf_exempt
+
+    template_name = 'mainPDF.html'
+
+    def get(self, request):
+        return TemplateResponse(request, self.template_name)
+
     def post(self, request):
         print(request.POST)
         print(request.FILES)
@@ -150,13 +170,11 @@ class PDFView(APIView):
             file_path = document.file_content.path
             docs = data_ingestion_pdf(file_path)
             get_embeddings(docs)
-            return Response({"document_id": document.id, "name": file_path})
+            return TemplateResponse(request, self.template_name, {'document_id': document.id, 'name': file_path})
+            
         else:
             print(form.errors)
             return Response({"error": 'invalid form data'}, status=400)
-
-
-
 
 
 
@@ -191,14 +209,14 @@ class QueryPDF(APIView):
 
 
  
-# query excel files files
+ 
 
 
 
-
+#file upload for Excel file(loads it and stores it in a vector databse and prepares it for quering)
 class XLXSView(APIView):
 
-    template_name = 'main1.html'
+    template_name = 'mainExcel.html'
 
     def get(self, request):
         return TemplateResponse(request, self.template_name)
@@ -221,40 +239,6 @@ class XLXSView(APIView):
             return Response({"error": 'invalid form data'}, status=400)
 
 
-
-
-
-
-
-
-
-
-
-
-
-# class QueryXLSX(APIView):
-#     def post(self, request):
-#         document = request.FILES.get('file_content')
-#         query = request.data.get('question')
-#         file_name = request.FILES.get("file_name")
-
-#         query = str(query)
-
-#         # Save the uploaded file to a temporary location on disk
-#         fs = FileSystemStorage()
-#         temp_file_path = fs.save(document.file_name, document)
-
-#         # Pass the temporary file path to the data_ingestion_txt function
-#         docs = data_ingestion_xlsx(temp_file_path)
-#         vector_store = get_embeddings(docs)
-
-#         llm = get_openai_llm()
-#         answer = get_response_llm(llm, vector_store, query)
-
-#         # Remove the temporary file
-#         os.remove(temp_file_path)
-
-#         return Response({'answer': answer})
 
 
 class QueryXLSX(APIView):
