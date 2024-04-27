@@ -1,0 +1,74 @@
+<!-- index.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PDF Query App</title>
+    <style>
+        #chat-interface {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>PDF Query App</h1>
+
+    <form id="file-upload-form">
+        {% csrf_token %}
+
+        <input type="file" id="fileInput" name="file_content">
+        <button type="submit" id="upload-button">Upload File</button>
+    </form>
+
+    <div id="chat-interface">
+        <h2>Chat Interface</h2>
+        <input type="text" id="query-input" placeholder="Ask a question...">
+        <button id="submit-query">Ask</button>
+        <div id="chat-log"></div>
+    </div>
+
+    <script>
+        let csrfmiddlewaretoken = document.querySelector("input[type=hidden]").value;
+
+        document.getElementById("file-upload-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            let formData = new FormData();
+            formData.append('file_content', document.getElementById("fileInput").files[0]);
+            formData.append("csrfmiddlewaretoken", csrfmiddlewaretoken);
+
+            fetch("{% url 'pdf_view' %}", {
+                method: "POST",
+                body: formData,
+            })
+           .then(response => response.json())
+           .then(data => {
+                console.log(data);
+                document.getElementById("chat-interface").style.display = "block";
+                document.getElementById("chat-log").innerHTML = "";
+            })
+           .catch(error => console.error(error));
+        });
+
+        document.getElementById("submit-query").addEventListener("click", function(event) {
+            event.preventDefault();
+            let query = document.getElementById("query-input").value;
+
+            fetch("{% url 'querypdf_view' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ question: query })
+            })
+           .then(response => response.json())
+           .then(data => {
+                console.log(data);
+                let chatLog = document.getElementById("chat-log");
+                chatLog.innerHTML += `<p>You: ${query}</p>`;
+                chatLog.innerHTML += `<p>LLM: ${data.answer}</p>`;
+            })
+           .catch(error => console.error(error));
+        });
+    </script>
+</body>
+</html>

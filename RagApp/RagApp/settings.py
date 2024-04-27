@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 from pathlib import Path
 import os
-
+load_dotenv()
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -129,15 +129,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static_in_env')]
 VENV_PATH = os.path.dirname(BASE_DIR)
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(VENV_PATH, 'media_root')
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(VENV_PATH, 'media_root')
 
-
-#celery settings
-
-CELERY_BROKER_URL = ' redis://localhost:6379/0' 
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'   
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'UTC'

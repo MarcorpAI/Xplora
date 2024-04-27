@@ -11,6 +11,7 @@ from pinecone import Pinecone
 from langchain.chains import RetrievalQA
 from langchain_community.document_loaders import Docx2txtLoader
 from langchain_community.document_loaders import PyPDFLoader
+import os
 load_dotenv() 
 
 
@@ -40,6 +41,7 @@ def data_ingestion_txt(file_path:str, encoding:str=None):
 #vector embedding and vectorstore(Pinecone)
 
 def get_embeddings(docs):
+    load_dotenv()
     """
     Retrieves embeddings for a list of documents.
 
@@ -50,13 +52,13 @@ def get_embeddings(docs):
         PineconeVectorStore: A vector store containing the embeddings of the documents.
     """
     Pinecone(
-        api_key=PINECONE_API_KEY,
+        api_key=os.environ.get('pinecone'),
     )
 
     vector_store = PineconeVectorStore.from_documents(
         docs,
         embedding=OpenAIEmbeddings(),
-        index_name=INDEX_NAME
+        index_name='app1',
     )
 
     return vector_store

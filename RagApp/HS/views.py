@@ -15,7 +15,9 @@ import json
 import os
 from django.core.files.storage import FileSystemStorage
 from django.template.response import TemplateResponse
-
+from io import BytesIO
+from django.core.files.uploadedfile import InMemoryUploadedFile
+import tempfile
  
 
 
@@ -64,12 +66,20 @@ class QueryView(APIView):
 
         query = str(query)
 
-        # Save the uploaded file to a temporary location on disk
-        fs = FileSystemStorage()
-        temp_file_path = fs.save(document.name, document)
+        file_content = BytesIO(document.read())
 
-        # Pass the temporary file path to the data_ingestion_txt function
-        docs = data_ingestion_txt(temp_file_path, encoding='utf-8')
+        # Create an InMemoryUploadedFile object
+        uploaded_file = InMemoryUploadedFile(
+            file=file_content,
+            field_name=None,
+            name=document.name,
+            content_type=document.content_type,
+            size=document.size,
+            charset=document.charset,
+        )
+
+
+        docs = data_ingestion_pdf(uploaded_file)
         vector_store = get_embeddings(docs)
 
         llm = get_openai_llm()
@@ -83,9 +93,11 @@ class QueryView(APIView):
 
 
 
+
+
 class DocxView(APIView):
 
-    template_name = 'MainDocx.html'
+    template_name = 'index.html'
 
     def get(self, request):
         return TemplateResponse(request, self.template_name)
@@ -124,19 +136,20 @@ class QueryDocx(APIView):
 
         query = str(query)
 
-        # Save the uploaded file to a temporary location on disk(temporary still looking for an alternative means of sving the files)
-        fs = FileSystemStorage()
-        temp_file_path = fs.save(document.name, document)
+        # store the file in a temporary location
+        with tempfile.NamedTemporaryFile(suffix='.docx', delete=False) as temp_file:
+            temp_file.write(document.read())
+            temp_file_path = temp_file.name
 
-        # Pass the temporary file path to the data_ingestion_txt function
+
         docs = data_ingestion_docx(temp_file_path)
         vector_store = get_embeddings(docs)
 
         llm = get_openai_llm()
         answer = get_response_llm(llm, vector_store, query)
 
-        # Remove the temporary file
-        os.remove(temp_file_path)
+        # remove the temporary file after processing
+        os.unlink(temp_file_path)
 
         return Response({'answer': answer})
 
@@ -154,7 +167,7 @@ class QueryDocx(APIView):
 # this is the file upload for pdf
 class PDFView(APIView):
 
-    template_name = 'mainPDF.html'
+    template_name = 'index.html'
 
     def get(self, request):
         return TemplateResponse(request, self.template_name)
@@ -191,20 +204,19 @@ class QueryPDF(APIView):
 
         query = str(query)
 
-        # Save the uploaded file to a temporary location on disk
-        fs = FileSystemStorage()
-        temp_file_path = fs.save(document.name, document)
+        with tempfile.NamedTemporaryFile(suffix='.docx', delete=False) as temp_file:
+            temp_file.write(document.read())
+            temp_file_path = temp_file.name
 
-        # Pass the temporary file path to the data_ingestion_txt function
+
         docs = data_ingestion_pdf(temp_file_path)
         vector_store = get_embeddings(docs)
 
         llm = get_openai_llm()
         answer = get_response_llm(llm, vector_store, query)
 
-        # Remove the temporary file
-        os.remove(temp_file_path)
-
+        # remove the temporary file after processing
+        os.unlink(temp_file_path)
         return Response({'answer': answer})
 
 
@@ -216,7 +228,7 @@ class QueryPDF(APIView):
 #file upload for Excel file(loads it and stores it in a vector databse and prepares it for quering)
 class XLXSView(APIView):
 
-    template_name = 'mainExcel.html'
+    template_name = 'index.html'
 
     def get(self, request):
         return TemplateResponse(request, self.template_name)
@@ -246,32 +258,22 @@ class QueryXLSX(APIView):
         document = request.FILES.get('file_content')
         query = request.data.get('question')
 
-        if not document:
-            return Response({'error': 'No file uploaded'}, status=400)
-            print(Response)
+        with tempfile.NamedTemporaryFile(suffix='.xlsx', delete=False) as temp_file:
+            temp_file.write(document.read())
+            temp_file_path = temp_file.name
 
-        query = str(query)
+        docs = data_ingestion_xlsx(temp_file_path)
+        vector_store = get_embeddings(docs)
 
-        try:
-            # Save the uploaded file to a temporary location on disk
-            fs = FileSystemStorage()
-            temp_file_path = fs.save(document.name, document)
+        llm = get_openai_llm()
+        answer = get_response_llm(llm, vector_store, query)
 
-            # Pass the temporary file path to the data_ingestion_xlsx function
-            docs = data_ingestion_xlsx(temp_file_path)
-            vector_store = get_embeddings(docs)
+        os.unlink(temp_file_path)
 
-            llm = get_openai_llm()
-            answer = get_response_llm(llm, vector_store, query)
+        return Response({"answer": answer})
 
-            # Remove the temporary file
-            os.remove(temp_file_path)
 
-            return Response({'answer': answer})
-
-        except Exception as e:
-            # Handle any exceptions that might occur during file processing
-            return Response({'error': str(e)}, status=500)
+        
 
 
 
