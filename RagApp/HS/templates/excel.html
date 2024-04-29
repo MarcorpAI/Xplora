@@ -1,0 +1,29 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RAG Application</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %} ">
+</head>
+<body>
+    
+    <h1>RAG Application</h1>
+    {% comment %} {% csrf_token %} {% endcomment %}
+    <div id="file-upload">
+        <h2>Upload PDF File</h2>
+        <input type="file" id="file-input" name="file_content">
+        <input type="text" name="file_name" id="fileName"> 
+        <button id="upload-btn">Upload</button>
+        <div id="upload-status"></div>
+    </div>
+    <div id="query-section">
+        <h2>Ask a Question</h2>
+        <input type="text" id="query-input" placeholder="Enter your question">
+        <button id="query-btn">Submit</button>
+        <div id="output"></div>
+    </div>
+    {% csrf_token %}
+    <script src="{% static 'js/scriptx.js' %}"></script>
+</body>
+</html>

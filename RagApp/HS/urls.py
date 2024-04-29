@@ -1,14 +1,14 @@
 from django.urls import path
 from . import views
-from .views import FileInteractionView, QueryView, DocxView, QueryDocx, QueryPDF, PDFView, XLXSView, QueryXLSX
+from .views import QueryPDF, PDFView, XLXSView, QueryXLSX, DOCXView, QueryDocx
 
 urlpatterns = [
     # Urls for .txt file uploads and querying(not really useful right now) work with the rest
-    path('file_interaction/', FileInteractionView.as_view(), name="file_upload_endpoint"),
-    path('query_view/', QueryView.as_view(), name="query_endpoint"),
+    # path('file_interaction/', FileInteractionView.as_view(), name="file_upload_endpoint"),
+    # path('query_view/', QueryView.as_view(), name="query_endpoint"),
 
 
-    # Urls for PDF upload and querying
+    # # Urls for PDF upload and querying
     path('querypdf_view/', QueryPDF.as_view(), name='querypdf_view'),
     path('uploadpdf_view/', PDFView.as_view(), name="pdf_view"),
     
@@ -16,9 +16,10 @@ urlpatterns = [
     path('uploadxlsx_view/', XLXSView.as_view(), name="xlsx_upload"),
     path('queryxlsx_view/', QueryXLSX.as_view(), name="xlsx_query"),
 
-    # Urls for .docx file upload and querying
-    path('uploaddocx_view/', DocxView.as_view(), name='docx_upload'),
-    path('querydocx_view/', QueryDocx.as_view()),
+
+    path('uploaddocx_view/', DOCXView.as_view(), name="docx_upload"),
+    path('querydocx_view/', QueryDocx.as_view(), name="docx_query"),
+
 
 
 ]

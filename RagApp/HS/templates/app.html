@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Icons -->
+    <link rel='stylesheet'
+        href='https://cdn-uicons.flaticon.com/2.3.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
+
+    <title> Xplora </title>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar-box">
+        <div class="navbar-box-layer">
+
+            <div class="nav-option-box">
+                <h2><a href="/"> Xplora </a></h2>
+            </div>
+
+            <div class="nav-account-option-box">
+                <div class="nav-account-img">
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar-box">
+        <div class="sidebar-box-layer">
+
+            <div class="sidebar-openBtn">
+                <i class="fi fi-rr-menu-burger"></i>
+            </div>
+
+            <div class="sidebar-options-box">
+                <ul>
+                    <li>
+                        <button class="new-fileBtn"><i class="fi fi-rr-plus"></i></button>
+                        <div class="tooltip">New chat</div>
+                    </li>
+                    <li>
+                        <button class="new-fileBtn"><i class="fi fi-rr-time-past"></i></button>
+                        <div class="tooltip">Chat history</div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="sidebar-footer-box">
+                <ul>
+                    <li>
+                        <button class="new-fileBtn"><i class="fi fi-rr-interrogation"></i></button>
+                        <div class="tooltip sidebar-footer-tip">FAQ</div>
+                    </li>
+                    <li>
+                        <button class="new-fileBtn"><i class="fi fi-rr-settings"></i></button>
+                        <div class="tooltip sidebar-footer-tip">Settings</div>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="main-box">
+        <div class="main-box-layer">
+
+            <form method="post" enctype="multipart/form-data">
+
+
+                <div class="chat-box">
+
+                    {% if feedback %}
+                    <h2>Feedback:</h2>
+                    <p>{{ feedback }}</p>
+                    {% endif %}
+
+                    <div class="chat-box-layer">
+
+                        <div class="chat-title">
+                            <!-- <h2> Chat with document </h2> -->
+                        </div>
+
+                        <div class="file-upload-box">
+                            <div class="upload-file-icon">
+                                <i class="fi fi-rr-folder-upload"></i>
+                            </div>
+
+                            <div class="upload-text">
+                                <h4> Click to upload or drag your file here </h4>
+                                <p> Upload up to 2 files at once, Upgrade for more </p>
+                            </div>
+                            <div class="upload-fileBtn">
+                                {% csrf_token %}
+                                {{ form.as_p }}
+                                <ul>
+                                    <li>
+                                        <button class="new-fileBtn"><i class="fi fi-rr-add-document"></i> Upload files
+                                        </button>
+                                        <div class="tooltip uploadBtn-tip">Hold Control(Ctrl) to select multiple files.
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="prompt-box">
+
+                    <div class="prompt-box-layer">
+
+                        <div class="prompt-input">
+                            <input type="text" name="prompt" placeholder="Enter a prompt here" autocomplete="off">
+                        </div>
+
+                        <div class="prompt-action-box">
+                            <ul>
+                                <li>
+                                    <button class="new-fileBtn"><i class="fi fi-rr-file-upload"></i></button>
+                                    <div class="tooltip prompt-tip">Upload file</div>
+                                </li>
+                                <li>
+                                    <button class="new-fileBtn"><i
+                                            class="fi fi-rr-paper-plane submit-icon"></i></button>
+                                    <div class="tooltip prompt-tip">Submit</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="info-text">
+                        <p>Xplora may display inaccurate info, so verify its responses. <a href="#"> Your privacy &
+                                Xplora
+                                Apps </a></p>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="{% static 'css/app.js' %}"></script>
+
+</body>
+
+</html>

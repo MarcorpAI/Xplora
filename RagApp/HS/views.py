@@ -32,62 +32,60 @@ and the second view handles the file interaction. when a file upload is successf
 
 
 
-class FileInteractionView(APIView):
+# class FileInteractionView(APIView):
 
-    template_name = 'mainTXT.html'
+#     template_name = 'mainTXT.html'
 
-    def get(self, request):
-        return TemplateResponse(request, self.template_name)
+#     def get(self, request):
+#         return TemplateResponse(request, self.template_name)
 
-    def post(self, request):
-        print(request.POST)   # Check POST data
-        print(request.FILES)  # Check uploaded files
+#     def post(self, request):
+#         print(request.POST)   # Check POST data
+#         print(request.FILES)  # Check uploaded files
 
-        file_content = request.FILES.get('file_content')
-        form = DocumentUploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            document = form.save()
-            file_path = document.file_content.path
-            docs = data_ingestion_txt(file_path, encoding='utf-8')
-            get_embeddings(docs)
-            return Response({"document_id": document_id, "name": file_path})
-            return TemplateResponse(request, self.template_name, {'document_id': document.id, 'name': file_path})
-        else:
-            print(form.errors)
-            return Response({'error': 'Invalid form data'}, status=400)
+#         file_content = request.FILES.get('file_content')
+#         form = DocumentUploadForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             document = form.save()
+#             file_path = document.file_content.path
+#             docs = data_ingestion_txt(file_path, encoding='utf-8')
+#             get_embeddings(docs)
+#             return Response({"document_id": document_id, "name": file_path})
+#             return TemplateResponse(request, self.template_name, {'document_id': document.id, 'name': file_path})
+#         else:
+#             print(form.errors)
+#             return Response({'error': 'Invalid form data'}, status=400)
 
 
 
-class QueryView(APIView):
-    def post(self, request):
-        document = request.FILES.get('file_content')
-        query = request.data.get('question')
+# class QueryView(APIView):
+#     def post(self, request):
+#         document = request.FILES.get('file_content')
+#         query = request.data.get('question')
         
 
-        query = str(query)
+#         query = str(query)
 
-        file_content = BytesIO(document.read())
+#         file_content = BytesIO(document.read())
 
-        # Create an InMemoryUploadedFile object
-        uploaded_file = InMemoryUploadedFile(
-            file=file_content,
-            field_name=None,
-            name=document.name,
-            content_type=document.content_type,
-            size=document.size,
-            charset=document.charset,
-        )
-
-
-        docs = data_ingestion_pdf(uploaded_file)
-        vector_store = get_embeddings(docs)
-
-        llm = get_openai_llm()
-        answer = get_response_llm(llm, vector_store, query)
-
-        return Response({"answer": answer})
+#         # Create an InMemoryUploadedFile object
+#         uploaded_file = InMemoryUploadedFile(
+#             file=file_content,
+#             field_name=None,
+#             name=document.name,
+#             content_type=document.content_type,
+#             size=document.size,
+#             charset=document.charset,
+#         )
 
 
+#         docs = data_ingestion_pdf(uploaded_file)
+#         vector_store = get_embeddings(docs)
+
+#         llm = get_openai_llm()
+#         answer = get_response_llm(llm, vector_store, query)
+
+#         return Response({"answer": answer})
 
 
 
@@ -95,9 +93,15 @@ class QueryView(APIView):
 
 
 
-class DocxView(APIView):
 
-    template_name = 'index.html'
+
+
+
+
+# code for handling file uploads for docx ms word file
+class DOCXView(APIView):
+
+    template_name = 'docx.html'
 
     def get(self, request):
         return TemplateResponse(request, self.template_name)
@@ -121,41 +125,37 @@ class DocxView(APIView):
 
 
 
-
-
-
-
-
-
-
-# query docx file
+# code to handle quering of docx files
 class QueryDocx(APIView):
     def post(self, request):
         document = request.FILES.get('file_content')
-        query = request.data.get('question')
+        query = request.POST.get('question')
+
+        if not document:
+            return Response({"error": "No file uploaded"}, status=400)
+
+        if not query:
+            return Response({"error": "Missing question parameter in request data"}, status=400)
 
         query = str(query)
 
-        # store the file in a temporary location
         with tempfile.NamedTemporaryFile(suffix='.docx', delete=False) as temp_file:
-            temp_file.write(document.read())
-            temp_file_path = temp_file.name
+            try:
+                temp_file.write(document.read())
+                temp_file_path = temp_file.name
 
+                temp_file.close()
 
-        docs = data_ingestion_docx(temp_file_path)
-        vector_store = get_embeddings(docs)
+                docs = data_ingestion_docx(temp_file_path)
+                vector_store = get_embeddings(docs)
 
-        llm = get_openai_llm()
-        answer = get_response_llm(llm, vector_store, query)
+                llm = get_openai_llm()
+                answer = get_response_llm(llm, vector_store, query)
 
-        # remove the temporary file after processing
-        os.unlink(temp_file_path)
-
-        return Response({'answer': answer})
-
-
-
-
+                return Response({'answer': answer})
+            finally:
+                # Ensure the temporary file is deleted after processing
+                os.unlink(temp_file_path)
 
 
 
@@ -164,10 +164,10 @@ class QueryDocx(APIView):
 
 
 
-# this is the file upload for pdf
+# # this is the file upload for pdf
 class PDFView(APIView):
 
-    template_name = 'index.html'
+    template_name = 'work.html'
 
     def get(self, request):
         return TemplateResponse(request, self.template_name)
@@ -194,31 +194,39 @@ class PDFView(APIView):
 
 
 
-
 #query pdf files
+
 
 class QueryPDF(APIView):
     def post(self, request):
         document = request.FILES.get('file_content')
-        query = request.data.get('question')
+        query = request.POST.get('question')
+
+        if not document:
+            return Response({"error": "No file uploaded"}, status=400)
+
+        if not query:
+            return Response({"error": "Missing question parameter in request data"}, status=400)
 
         query = str(query)
 
-        with tempfile.NamedTemporaryFile(suffix='.docx', delete=False) as temp_file:
-            temp_file.write(document.read())
-            temp_file_path = temp_file.name
+        with tempfile.NamedTemporaryFile(suffix='.pdf', delete=False) as temp_file:
+            try:
+                temp_file.write(document.read())
+                temp_file_path = temp_file.name
 
+                temp_file.close()
 
-        docs = data_ingestion_pdf(temp_file_path)
-        vector_store = get_embeddings(docs)
+                docs = data_ingestion_pdf(temp_file_path)
+                vector_store = get_embeddings(docs)
 
-        llm = get_openai_llm()
-        answer = get_response_llm(llm, vector_store, query)
+                llm = get_openai_llm()
+                answer = get_response_llm(llm, vector_store, query)
 
-        # remove the temporary file after processing
-        os.unlink(temp_file_path)
-        return Response({'answer': answer})
-
+                return Response({'answer': answer})
+            finally:
+                # Ensure the temporary file is deleted after processing
+                os.unlink(temp_file_path)
 
  
  
@@ -228,7 +236,7 @@ class QueryPDF(APIView):
 #file upload for Excel file(loads it and stores it in a vector databse and prepares it for quering)
 class XLXSView(APIView):
 
-    template_name = 'index.html'
+    template_name = 'excel.html'
 
     def get(self, request):
         return TemplateResponse(request, self.template_name)
@@ -252,25 +260,38 @@ class XLXSView(APIView):
 
 
 
-
+# querying excel files
 class QueryXLSX(APIView):
     def post(self, request):
         document = request.FILES.get('file_content')
-        query = request.data.get('question')
+        query = request.POST.get('question')
+
+        if not document:
+            return Response({"error": "No file uploaded"}, status=400)
+
+        if not query:
+            return Response({"error": "Missing question parameter in request data"}, status=400)
+
+        query = str(query)
 
         with tempfile.NamedTemporaryFile(suffix='.xlsx', delete=False) as temp_file:
-            temp_file.write(document.read())
-            temp_file_path = temp_file.name
+            try:
+                temp_file.write(document.read())
+                temp_file_path = temp_file.name
 
-        docs = data_ingestion_xlsx(temp_file_path)
-        vector_store = get_embeddings(docs)
+                temp_file.close()
 
-        llm = get_openai_llm()
-        answer = get_response_llm(llm, vector_store, query)
+                docs = data_ingestion_xlsx(temp_file_path)
+                vector_store = get_embeddings(docs)
 
-        os.unlink(temp_file_path)
+                llm = get_openai_llm()
+                answer = get_response_llm(llm, vector_store, query)
 
-        return Response({"answer": answer})
+                return Response({'answer': answer})
+            finally:
+                # Ensure the temporary file is deleted after processing
+                os.unlink(temp_file_path)
+ 
 
 
         

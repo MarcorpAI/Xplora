@@ -88,6 +88,11 @@ def get_openai_llm():
 
 
 
+
+
+
+
+
 def get_response_llm(llm, vector_store, question):
     """
     Retrieves the answer to a question using a language model and a vector store.
