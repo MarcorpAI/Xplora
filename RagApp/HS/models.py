@@ -20,10 +20,14 @@ def validate_file_mimetype(file):
 class DocumentUpload(models.Model):
     file_name = models.CharField(max_length=100, blank=True)
     file_content = models.FileField(upload_to='uploads/', validators=[file_validator, validate_file_mimetype])
+    file_metadata = models.JSONField(blank=True, null=True)
 
 
     def __str__(self):
-        return self.file_name
+        if self.file_name:
+            return self.file_name
+        else:
+            return f"Untitled Document ({self.pk})"
     
 
     

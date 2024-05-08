@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import QueryPDF, PDFView, XLXSView, QueryXLSX, DOCXView, QueryDocx
+from .views import QueryPDF, PDFView, XLSXView, QueryXLSX, DOCXView, QueryDocx
 
 urlpatterns = [
     # Urls for .txt file uploads and querying(not really useful right now) work with the rest
@@ -13,7 +13,7 @@ urlpatterns = [
     path('uploadpdf_view/', PDFView.as_view(), name="pdf_view"),
     
     # Urls for Excel files and querying
-    path('uploadxlsx_view/', XLXSView.as_view(), name="xlsx_upload"),
+    path('uploadxlsx_view/', XLSXView.as_view(), name="xlsx_upload"),
     path('queryxlsx_view/', QueryXLSX.as_view(), name="xlsx_query"),
 
 

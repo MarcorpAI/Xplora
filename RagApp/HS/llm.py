@@ -7,18 +7,47 @@ from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from .models import DocumentUpload
 from langchain_pinecone import PineconeVectorStore
-from pinecone import Pinecone
+from pinecone import Pinecone, PodSpec, ServerlessSpec
 from langchain.chains import RetrievalQA
 from langchain_community.document_loaders import Docx2txtLoader
 from langchain_community.document_loaders import PyPDFLoader
+from langchain_core.prompts import ChatPromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate,AIMessagePromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.messages import AIMessage, HumanMessage
+from langchain.chains.question_answering import StuffDocumentsChain
+from langchain_core.load.serializable import Serializable
 import os
+import pinecone
+
+import logging
+logging.basicConfig(level=logging.DEBUG)
+
+
 load_dotenv() 
 
-
-# the code to load and embed text files into the databae and
-#prepare for querying
 embeddings = OpenAIEmbeddings()
 
+
+
+ #Initialize Pinecone
+PINECONE_API_KEY = os.getenv('PINECONE_API_KEY')
+PINECONE_ENVIRONMENT = os.getenv('PINECONE_ENVIRONMENT')
+PINECONE_INDEX_NAME = 'app5'
+
+pc = Pinecone(api_key=PINECONE_API_KEY)
+index = pc.Index("app5")
+
+# Initialize OpenAI embeddings
+embeddings = OpenAIEmbeddings(model="text-embedding-ada-002")  # Adjust model as needed
+
+
+
+
+
+
+
+
+ 
 
  
 
@@ -38,9 +67,7 @@ def data_ingestion_txt(file_path:str, encoding:str=None):
     return docs
 
 
-#vector embedding and vectorstore(Pinecone)
-
-def get_embeddings(docs):
+def get_embeddings(docs, metadata_filter=None):
     load_dotenv()
     """
     Retrieves embeddings for a list of documents.
@@ -55,13 +82,21 @@ def get_embeddings(docs):
         api_key=os.environ.get('pinecone'),
     )
 
+    if metadata_filter is not None:
+        docs = [doc for doc in docs if all(doc.metadata.get(key) == value for key, value in metadata_filter.items())]
+
+   
+    
+
     vector_store = PineconeVectorStore.from_documents(
         docs,
         embedding=OpenAIEmbeddings(),
-        index_name='app1',
+        index_name='app5',
     )
 
     return vector_store
+
+
 
 
 
@@ -92,8 +127,7 @@ def get_openai_llm():
 
 
 
-
-def get_response_llm(llm, vector_store, question):
+def get_response_llm(llm, vector_store, question, file_id, metadata_filter=None):
     """
     Retrieves the answer to a question using a language model and a vector store.
 
@@ -101,19 +135,33 @@ def get_response_llm(llm, vector_store, question):
         llm (LanguageModel): The language model used for retrieval.
         vector_store (VectorStore): The vector store used for retrieval.
         question (str): The question to retrieve the answer for.
+        file_id (int): The unique file identifier.
+        metadata_filter (dict, optional): Additional metadata filters.
 
     Returns:
         str: The answer to the question.
-    """
+    """ 
+    search_kwargs = {
+        "k": 3,  # Increase k to return more results
+        "filter": {"file_name": os.path.basename(file_id)}
+    }
+
+    if metadata_filter:
+        search_kwargs["filter"].update(metadata_filter)
+
     chain = RetrievalQA.from_chain_type(
         llm=llm,
         chain_type="stuff",
-        retriever = vector_store.as_retriever(
-            search_type="mmr", search_kwargs={"k":3}
-        ),
+        retriever=vector_store.as_retriever(search_type="similarity", search_kwargs=search_kwargs)
     )
-    answer = chain.invoke(question)
+
+    answer = chain.invoke({"query": question})
+
     return answer
+
+
+
+
 
 
 
@@ -130,6 +178,11 @@ def data_ingestion_docx(file_path:str):
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
 
     docs = text_splitter.split_documents(documents)
+
+    for i, doc in enumerate(docs):
+        doc.metadata["file_name"] = os.path.basename(file_path)
+        doc.metadata["doc_id"] = f"{file_path}_{i}"
+
     return docs
 
 
@@ -147,10 +200,13 @@ def data_ingestion_pdf(file_path:str):
     loader = PyPDFLoader(file_path)
     pages = loader.load_and_split()
 
+    for i, page in enumerate(pages):
+        page.metadata["file_name"] = os.path.basename(file_path)
+        page.metadata["doc_id"] = f"{file_path}_{i}"
+
+     
+
     return pages
-
-
-
 
 
 
@@ -167,6 +223,10 @@ def data_ingestion_xlsx(file_path: str):
     """
     loader = UnstructuredExcelLoader(file_path, mode="single")
     docs = loader.load()
+
+    for i, doc in enumerate(docs):
+        doc.metadata["file_name"] = os.path.basename(file_path)
+        doc.metadata["doc_id"] = f"{file_path}_{i}"
 
     return docs
 

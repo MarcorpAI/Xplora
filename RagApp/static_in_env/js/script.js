@@ -21,3 +21,8 @@ function addMessage(sender, message) {
   chatHistory.appendChild(messageElement);
   chatHistory.scrollTo({ top: chatHistory.scrollHeight, behavior: 'smooth' });
 }
+
+
+
+
+

@@ -1,0 +1,20 @@
+<!-- base.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    {% include 'head.html' %}
+</head>
+
+<body>
+    {% include 'nav.html' %}
+
+    <!-- Content block for child templates to override -->
+    <div id="content">
+        {% block content %}
+
+
+        {% endblock %}
+    </div>
+</body>
+</html>

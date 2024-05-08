@@ -18,6 +18,8 @@ from django.template.response import TemplateResponse
 from io import BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 import tempfile
+from rest_framework.parsers import MultiPartParser
+import hashlib
  
 
 
@@ -92,70 +94,25 @@ and the second view handles the file interaction. when a file upload is successf
 
 
 
+# code for txt file above (dont bother about that one)
 
 
+def hash_file(file_path):
+    """
+    Calculate the hash of a file's content.
 
+    Args:
+        file_path (str): The path to the file.
 
-
-
-# code for handling file uploads for docx ms word file
-class DOCXView(APIView):
-
-    template_name = 'docx.html'
-
-    def get(self, request):
-        return TemplateResponse(request, self.template_name)
-
-    def post(self, request):
-        print(request.POST)
-        print(request.FILES)
-
-        file_content = request.FILES.get("file_content")
-        form = DocumentUploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            document = form.save()
-            file_path = document.file_content.path
-            docs = data_ingestion_docx(file_path)
-            get_embeddings(docs)
-            return TemplateResponse(request, self.template_name, {'document_id': document.id, 'name': file_path})
-            
-        else:
-            print(form.errors)
-            return Response({"error": 'invalid form data'}, status=400)
-
-
-
-# code to handle quering of docx files
-class QueryDocx(APIView):
-    def post(self, request):
-        document = request.FILES.get('file_content')
-        query = request.POST.get('question')
-
-        if not document:
-            return Response({"error": "No file uploaded"}, status=400)
-
-        if not query:
-            return Response({"error": "Missing question parameter in request data"}, status=400)
-
-        query = str(query)
-
-        with tempfile.NamedTemporaryFile(suffix='.docx', delete=False) as temp_file:
-            try:
-                temp_file.write(document.read())
-                temp_file_path = temp_file.name
-
-                temp_file.close()
-
-                docs = data_ingestion_docx(temp_file_path)
-                vector_store = get_embeddings(docs)
-
-                llm = get_openai_llm()
-                answer = get_response_llm(llm, vector_store, query)
-
-                return Response({'answer': answer})
-            finally:
-                # Ensure the temporary file is deleted after processing
-                os.unlink(temp_file_path)
+    Returns:
+        str: The SHA-256 hash of the file content.
+    """
+    sha256_hash = hashlib.sha256()
+    with open(file_path, "rb") as f:
+        # Read and update the hash in chunks
+        for byte_block in iter(lambda: f.read(4096), b""):
+            sha256_hash.update(byte_block)
+    return sha256_hash.hexdigest()
 
 
 
@@ -164,7 +121,14 @@ class QueryDocx(APIView):
 
 
 
-# # this is the file upload for pdf
+
+
+
+
+
+# view function that handles file uploads for PDF files
+
+
 class PDFView(APIView):
 
     template_name = 'work.html'
@@ -189,54 +153,58 @@ class PDFView(APIView):
             print(form.errors)
             return Response({"error": 'invalid form data'}, status=400)
 
+ 
 
-
-
-
-
-#query pdf files
-
+# view function that handles file querying for PDF files
 
 class QueryPDF(APIView):
     def post(self, request):
         document = request.FILES.get('file_content')
         query = request.POST.get('question')
+        if not document or not query:
+            return Response({'error': 'file_content and question are required.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        if not document:
-            return Response({"error": "No file uploaded"}, status=400)
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as temp_file:
+            for chunk in document.chunks():
+                temp_file.write(chunk)
+            temp_file_path = temp_file.name
 
-        if not query:
-            return Response({"error": "Missing question parameter in request data"}, status=400)
+        try:
+            docs = data_ingestion_pdf(temp_file_path)
 
-        query = str(query)
+            # Apply a metadata filter if needed
+            metadata_filter = {}  # Example: Adjust or remove as necessary
 
-        with tempfile.NamedTemporaryFile(suffix='.pdf', delete=False) as temp_file:
-            try:
-                temp_file.write(document.read())
-                temp_file_path = temp_file.name
+            vector_store = get_embeddings(docs, metadata_filter)
 
-                temp_file.close()
+            llm = get_openai_llm()
+            answer = get_response_llm(llm, vector_store, query, os.path.basename(temp_file_path), metadata_filter)
 
-                docs = data_ingestion_pdf(temp_file_path)
-                vector_store = get_embeddings(docs)
+            # Clean up the temporary file
+            os.remove(temp_file_path)
 
-                llm = get_openai_llm()
-                answer = get_response_llm(llm, vector_store, query)
-
-                return Response({'answer': answer})
-            finally:
-                # Ensure the temporary file is deleted after processing
-                os.unlink(temp_file_path)
-
- 
- 
+            return Response({'answer': answer})
+        except Exception as e:
+            # Clean up and respond with error
+            os.remove(temp_file_path)
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 
-#file upload for Excel file(loads it and stores it in a vector databse and prepares it for quering)
-class XLXSView(APIView):
 
-    template_name = 'excel.html'
+
+
+
+
+
+
+
+
+# view function that handles file upload for excel files
+
+class XLSXView(APIView):
+
+    template_name = 'excel1.html'
 
     def get(self, request):
         return TemplateResponse(request, self.template_name)
@@ -253,48 +221,109 @@ class XLXSView(APIView):
             docs = data_ingestion_xlsx(file_path)
             get_embeddings(docs)
             return TemplateResponse(request, self.template_name, {'document_id': document.id, 'name': file_path})
-           
+            
         else:
             print(form.errors)
             return Response({"error": 'invalid form data'}, status=400)
 
 
 
-# querying excel files
+# view that handles querying excel files
 class QueryXLSX(APIView):
     def post(self, request):
         document = request.FILES.get('file_content')
         query = request.POST.get('question')
+        if not document or not query:
+            return Response({'error': 'file_content and question are required.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        if not document:
-            return Response({"error": "No file uploaded"}, status=400)
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.xlsx') as temp_file:
+            for chunk in document.chunks():
+                temp_file.write(chunk)
+            temp_file_path = temp_file.name
 
-        if not query:
-            return Response({"error": "Missing question parameter in request data"}, status=400)
+        try:
+            docs = data_ingestion_xlsx(temp_file_path)
 
-        query = str(query)
+            # Apply a metadata filter if needed
+            metadata_filter = {}  # Example: Adjust or remove as necessary
 
-        with tempfile.NamedTemporaryFile(suffix='.xlsx', delete=False) as temp_file:
-            try:
-                temp_file.write(document.read())
-                temp_file_path = temp_file.name
+            vector_store = get_embeddings(docs, metadata_filter)
 
-                temp_file.close()
+            llm = get_openai_llm()
+            answer = get_response_llm(llm, vector_store, query, os.path.basename(temp_file_path), metadata_filter)
 
-                docs = data_ingestion_xlsx(temp_file_path)
-                vector_store = get_embeddings(docs)
+            # Clean up the temporary file
+            os.remove(temp_file_path)
 
-                llm = get_openai_llm()
-                answer = get_response_llm(llm, vector_store, query)
+            return Response({'answer': answer})
+        except Exception as e:
+            # Clean up and respond with error
+            os.remove(temp_file_path)
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-                return Response({'answer': answer})
-            finally:
-                # Ensure the temporary file is deleted after processing
-                os.unlink(temp_file_path)
- 
 
+
+
+#view than handles file upload for docx files 
+
+class DOCXView(APIView):
+
+    template_name = 'docx.html'
+
+    def get(self, request):
+        return TemplateResponse(request, self.template_name)
+
+    def post(self, request):
+        print(request.POST)
+        print(request.FILES)
+
+        file_content = request.FILES.get("file_content")
+        form = DocumentUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            document = form.save()
+            file_path = document.file_content.path
+            docs = data_ingestion_docx(file_path)
+            get_embeddings(docs)
+            return TemplateResponse(request, self.template_name, {'document_id': document.id, 'name': file_path})
+            
+        else:
+            print(form.errors)
+            return Response({"error": 'invalid form data'}, status=400)
 
         
+
+# view that handles querying of docx files
+class QueryDocx(APIView):
+    def post(self, request):
+        document = request.FILES.get('file_content')
+        query = request.POST.get('question')
+        if not document or not query:
+            return Response({'error': 'file_content and question are required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.docx') as temp_file:
+            for chunk in document.chunks():
+                temp_file.write(chunk)
+            temp_file_path = temp_file.name
+
+        try:
+            docs = data_ingestion_docx(temp_file_path)
+
+            # Apply a metadata filter if needed
+            metadata_filter = {}  # Example: Adjust or remove as necessary
+
+            vector_store = get_embeddings(docs, metadata_filter)
+
+            llm = get_openai_llm()
+            answer = get_response_llm(llm, vector_store, query, os.path.basename(temp_file_path), metadata_filter)
+
+            # Clean up the temporary file
+            os.remove(temp_file_path)
+
+            return Response({'answer': answer})
+        except Exception as e:
+            # Clean up and respond with error
+            os.remove(temp_file_path)
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 

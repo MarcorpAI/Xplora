@@ -1,8 +1,10 @@
- {% extends "base.html" %}
- 
- {% load static %}
- {% block content %}
- <div class="main-box">
+{% extends "base.html" %}
+
+{% load static %}
+
+
+{% block content %}
+    <div class="main-box">
         <div class="main-box-layer">
 
             <div class="chat-box">             
@@ -16,13 +18,13 @@
                             <div class="spinner"></div>
                             <span>Uploading file...</span>
                           </div>
+                          {% csrf_token %}
                         <div id="file-upload" class="file-upload-box">
                             <span class="file-name" id="fileNames"></span>
-                            <h2 class='chat-title'>Upload PDF Files</h2>
+                            <h2 class='chat-title'>Upload Excel Files Files</h2>
 
                             <div id="file-upload">
-                                <input type="file" id="file-input" name="file_content" accept=".pdf">
-                                
+                                <input type="file" id="file-input" name="file_content" accept=".xlsx">
                                 <button id="upload-btn">Upload</button>
                                 <div id="upload-status"></div>
                             </div>
@@ -73,10 +75,7 @@
         <div class="info-text">
             <p>Xplora may display inaccurate info, so verify its responses.</p>
         </div>
-    </div>
-    
-     
+    </div>    
     {% csrf_token %}
-    <script src="{% static 'js/scripts.js' %}"></script>
-
+    <script src="{% static 'js/scriptx.js' %}"></script>
     {% endblock content %}
