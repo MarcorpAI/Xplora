@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
       fileUploadSpinner.style.display = "flex";
 
 
-      fetch("http://127.0.0.1:8000/HS/uploadpdf_view/", {
+      fetch("http://127.0.0.1:8000/uploadpdf_view/", {
         method: "POST",
         body: formData,
         headers: {
@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const llmTypingSpinner = document.getElementById("llm-typing-spinner");
       llmTypingSpinner.style.display = "flex";
 
-      fetch("http://127.0.0.1:8000/HS/querypdf_view/", {
+      fetch("http://127.0.0.1:8000/querypdf_view/", {
         method: "POST",
         body: formData,
         headers: {

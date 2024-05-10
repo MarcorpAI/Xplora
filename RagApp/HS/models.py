@@ -1,6 +1,7 @@
 from django.db import models
 import uuid
-
+from django.contrib.auth import get_user_model
+from allauth.account.signals import user_logged_in, user_signed_up
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 import magic
@@ -8,6 +9,7 @@ import magic
 file_validator = FileExtensionValidator(['docx', 'pdf', 'xlsx', 'txt'])
 
 
+User = get_user_model()
 #custom code to validate file mime types
 def validate_file_mimetype(file):
     accept = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -28,7 +30,25 @@ class DocumentUpload(models.Model):
             return self.file_name
         else:
             return f"Untitled Document ({self.pk})"
+
+
+
+
+def user_signed_up_receiver(request, user, **kwargs):
+    print(request)
+    print(user)
+
+user_signed_up.connect(user_signed_up_receiver, sender=User)
+
+
+def user_logged_in_receiver(request, user, **kwargs):
+    print(request)
+    print(user)
+
+user_logged_in.connect(user_logged_in_receiver, sender=User)
+
     
+
 
     
 

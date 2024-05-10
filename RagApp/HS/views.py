@@ -18,6 +18,8 @@ from django.template.response import TemplateResponse
 from io import BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 import tempfile
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils.decorators import method_decorator
 from rest_framework.parsers import MultiPartParser
 import hashlib
  
@@ -28,7 +30,6 @@ basically what every code does here is file upload and file query.....each file 
 and the second view handles the file interaction. when a file upload is successful...it fetches the query file endpoint where the user passes a prompt
 
 """ 
-
 
 
 
@@ -128,14 +129,18 @@ def hash_file(file_path):
 
 # view function that handles file uploads for PDF files
 
-
-class PDFView(APIView):
-
+# @method_decorator(login_required, name='dispatch')
+class PDFView(LoginRequiredMixin,APIView):
     template_name = 'work.html'
+    redirect_field_name = 'next'
+    
 
+
+    # @method_decorator(login_required)
     def get(self, request):
         return TemplateResponse(request, self.template_name)
 
+    # @method_decorator(login_required)
     def post(self, request):
         print(request.POST)
         print(request.FILES)
@@ -202,9 +207,11 @@ class QueryPDF(APIView):
 
 # view function that handles file upload for excel files
 
-class XLSXView(APIView):
+class XLSXView(LoginRequiredMixin, APIView):
 
     template_name = 'excel1.html'
+    redirect_field_name = 'next'
+
 
     def get(self, request):
         return TemplateResponse(request, self.template_name)
@@ -266,9 +273,11 @@ class QueryXLSX(APIView):
 
 #view than handles file upload for docx files 
 
-class DOCXView(APIView):
+class DOCXView(LoginRequiredMixin, APIView):
 
     template_name = 'docx.html'
+    redirect_field_name = 'next'
+
 
     def get(self, request):
         return TemplateResponse(request, self.template_name)
@@ -324,6 +333,7 @@ class QueryDocx(APIView):
             # Clean up and respond with error
             os.remove(temp_file_path)
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 
 

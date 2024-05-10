@@ -1,12 +1,10 @@
 from django.urls import path
 from . import views
 from .views import QueryPDF, PDFView, XLSXView, QueryXLSX, DOCXView, QueryDocx
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    # Urls for .txt file uploads and querying(not really useful right now) work with the rest
-    # path('file_interaction/', FileInteractionView.as_view(), name="file_upload_endpoint"),
-    # path('query_view/', QueryView.as_view(), name="query_endpoint"),
-
+    # path('accounts/login/', auth_views.LoginView.as_view(), name='login'),
 
     # # Urls for PDF upload and querying
     path('querypdf_view/', QueryPDF.as_view(), name='querypdf_view'),

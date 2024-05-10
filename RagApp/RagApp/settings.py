@@ -35,19 +35,60 @@ INSTALLED_APPS = [
     'langchain',
     'chromadb',
     'celery',
-    "streamlit",
-    'rest_framework'
+    'rest_framework',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'django.contrib.sites',
+    "allauth.socialaccount.providers.github",
 ]
 
-MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-]
+ 
+
+SOCIALACCOUNT_PROVIDERS = {
+    "google":{
+        "PROCESS":'login_direct',
+        "METHOD":"oauth2",
+        "ADAPTER_CLASS":'HS.adapters.CustomSocialAccountAdapter',
+        "SCOPE":[
+            "profile",
+            "email"
+        ],
+        "AUTH_PARAMS":{"access_type":"online"}
+    },
+    "github":{
+        "PROCESS":'login_direct',
+        "SCOPE":[
+            "user",
+            "repo"
+        ]
+    }
+}
+
+
+SITE_ID = 2
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+# Configuration for allauth
+ACCOUNT_SESSION_REMEMBER = True
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+# ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_EMAIL_VERIFICATION = 'optional'
+SOCIALACCOUNT_AUTO_SIGNUP = True
+
+SOCIALACCOUNT_LOGIN_ON_GET=True
+
+
+SOCIALACCOUNT_ADAPTER = 'HS.adapters.CustomSocialAccountAdapter'
+
+
 
 ROOT_URLCONF = 'RagApp.urls'
 
@@ -66,12 +107,21 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'RagApp.wsgi.application'
+
+
+
+# Basic allauth settings
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
 
 
 # Database
@@ -93,6 +143,28 @@ FILE_UPLOAD_HANDLERS = [
 ]
 
 FILE_UPLOAD_PERMISSIONS = 0o644
+
+
+
+
+
+LOGIN_REDIRECT_URL = '/uploadpdf_view/'
+
+
+
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "allauth.account.middleware.AccountMiddleware",
+]
+
+
+
 
 
 # Password validation

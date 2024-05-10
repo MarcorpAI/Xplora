@@ -1,0 +1,51 @@
+{% extends "account/base.html" %}
+{% load i18n %}
+{% block head_title %}{% trans "Login" %}{% endblock head_title %}
+{% block content %}
+    <div class="login-page">
+        <h1>{% trans "Login" %}</h1>
+        <p>{% blocktrans %}Don't have an account? <a href="{{ signup_url }}">Sign up</a>.{% endblocktrans %}</p>
+        <form method="post" action="{% url 'account_login' %}" class="login-form">
+            {% csrf_token %}
+        {% if form.errors %}
+            <p class="error">An Error occured, Please try again</p>
+        {% endif %}
+            {% for field in form %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.errors %}
+                        {% for error in field.errors %}
+                            <p class="error">{{ error }}</p>
+                        {% endfor %}
+                        {% comment %} <p class="error">{{ error }}</p> {% endcomment %}
+                    {% endif %}
+                </div>
+            {% endfor %}
+            {% if redirect_field_value %}
+                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
+            {% endif %}
+            <button type="submit" class="btn btn-primary">{% trans "Login" %}</button>
+        </form>
+        {% if SOCIALACCOUNT_ENABLED %}
+            <div class="social-login">
+                {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

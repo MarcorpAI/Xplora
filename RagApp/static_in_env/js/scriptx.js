@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
       fileUploadSpinner.style.display = "flex";
 
 
-      fetch("http://127.0.0.1:8000/HS/uploadxlsx_view/", {
+      fetch("http://127.0.0.1:8000/uploadxlsx_view/", {
         method: "POST",
         body: formData,
         headers: {
@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const llmTypingSpinner = document.getElementById("llm-typing-spinner");
       llmTypingSpinner.style.display = "flex";
 
-      fetch("http://127.0.0.1:8000/HS/queryxlsx_view/", {
+      fetch("http://127.0.0.1:8000/queryxlsx_view/", {
         method: "POST",
         body: formData,
         headers: {
