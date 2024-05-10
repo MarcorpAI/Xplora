@@ -6,14 +6,14 @@ from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 import magic
 
-file_validator = FileExtensionValidator(['docx', 'pdf', 'xlsx', 'txt'])
+file_validator = FileExtensionValidator(['docx', 'pdf', 'xlsx', 'txt', 'csv'])
 
 
 User = get_user_model()
 #custom code to validate file mime types
 def validate_file_mimetype(file):
     accept = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    'text/plain', 'application/msword', 'application/vnd.ms-excel']
+    'text/plain', 'application/msword', 'application/vnd.ms-excel', 'text/csv']
 
     file_mime_type = magic.from_buffer(file.read(2024), mime=True)
     if file_mime_type not in accept:

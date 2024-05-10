@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import render, redirect
 from .forms import DocumentUploadForm , QuestionForm
 from .models import DocumentUpload
-from.llm import data_ingestion_txt, get_embeddings, get_openai_llm, get_response_llm, data_ingestion_docx, data_ingestion_pdf, data_ingestion_xlsx
+from.llm import data_ingestion_txt, get_embeddings, get_openai_llm, get_response_llm, data_ingestion_docx, data_ingestion_pdf, data_ingestion_xlsx, data_ingestion_csv
 from django.contrib import messages
 from django.views.decorators.http import require_http_methods 
 from django.views.decorators.csrf import csrf_exempt 
@@ -270,7 +270,6 @@ class QueryXLSX(APIView):
 
 
 
-
 #view than handles file upload for docx files 
 
 class DOCXView(LoginRequiredMixin, APIView):
@@ -298,8 +297,6 @@ class DOCXView(LoginRequiredMixin, APIView):
         else:
             print(form.errors)
             return Response({"error": 'invalid form data'}, status=400)
-
-        
 
 # view that handles querying of docx files
 class QueryDocx(APIView):
@@ -340,4 +337,67 @@ class QueryDocx(APIView):
 
 
 
+class CSVView(LoginRequiredMixin,APIView):
+    template_name = 'csv.html'
+    redirect_field_name = 'next'
+    
 
+
+    # @method_decorator(login_required)
+    def get(self, request):
+        return TemplateResponse(request, self.template_name)
+
+    # @method_decorator(login_required)
+    def post(self, request):
+        print(request.POST)
+        print(request.FILES)
+
+        file_content = request.FILES.get("file_content")
+        form = DocumentUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            document = form.save()
+            file_path = document.file_content.path
+            docs = data_ingestion_csv(file_path)
+            get_embeddings(docs)
+            return TemplateResponse(request, self.template_name, {'document_id': document.id, 'name': file_path})
+            
+        else:
+            print(form.errors)
+            return Response({"error": 'invalid form data'}, status=400)
+
+ 
+
+# view function that handles file querying for PDF files
+
+class QueryCSV(APIView):
+    def post(self, request):
+        document = request.FILES.get('file_content')
+        query = request.POST.get('question')
+        if not document or not query:
+            return Response({'error': 'file_content and question are required.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.csv') as temp_file:
+            for chunk in document.chunks():
+                temp_file.write(chunk)
+            temp_file_path = temp_file.name
+
+        try:
+            docs = data_ingestion_csv(temp_file_path)
+
+            # Apply a metadata filter if needed
+            metadata_filter = {}  # Example: Adjust or remove as necessary
+
+            vector_store = get_embeddings(docs, metadata_filter)
+
+            llm = get_openai_llm()
+            answer = get_response_llm(llm, vector_store, query, os.path.basename(temp_file_path), metadata_filter)
+
+            # Clean up the temporary file
+            os.remove(temp_file_path)
+
+            return Response({'answer': answer})
+        except Exception as e:
+            # Clean up and respond with error
+            os.remove(temp_file_path)
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

@@ -18,7 +18,8 @@ from langchain.chains.question_answering import StuffDocumentsChain
 from langchain_core.load.serializable import Serializable
 import os
 import pinecone
-
+from langchain_community.document_loaders.csv_loader import CSVLoader, UnstructuredCSVLoader
+from langchain_experimental.agents.agent_toolkits import create_csv_agent
 import logging
 logging.basicConfig(level=logging.DEBUG)
 
@@ -234,6 +235,16 @@ def data_ingestion_xlsx(file_path: str):
 
 
 
+
+def data_ingestion_csv(file_path:str):
+    loader = UnstructuredCSVLoader(file_path)
+    docs = loader.load()
+
+    for i, doc in enumerate(docs):
+        doc.metadata["file_name"] = os.path.basename(file_path)
+        doc.metadata["doc_id"] = f"{file_path}_{i}"
+
+    return docs
 
         
         
