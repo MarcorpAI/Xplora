@@ -8,7 +8,7 @@ urlpatterns = [
 
     # # Urls for PDF upload and querying
     path('querypdf_view/', QueryPDF.as_view(), name='querypdf_view'),
-    path('uploadpdf_view/', PDFView.as_view(), name="pdf_view"),
+    path('', PDFView.as_view(), name="pdf_view"),
 
 
     path('querycsv_view/', QueryCSV.as_view(), name='querycsv_view'),
