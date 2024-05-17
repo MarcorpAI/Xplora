@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="main-box">
+       <div class="main-box-layer">
+
+           <div class="chat-box">             
+               {% comment %} <div id="output">   
+               </div> {% endcomment %}
+
+                
+                   {% comment %} <label for="file-input"> {% endcomment %}
+<div class="p-4 sm:ml-64">
+                        <form id="connection-form">
+                            {% csrf_token %}
+
+                            <div class="form-inputs-container">
+                                <!-- Form inputs here -->
+
+                                <label for="user">User:</label>
+                                <input type="text" id="user" name="user" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-half p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="root" required>
+                                <label for="password">Password:</label>
+                                <input type="password" id="password" name="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-half p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="•••••••••" required>
+                                <label for="host">Host:</label>
+                                <input type="text" id="host" name="host" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-half p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="localhost" required>
+                                <label for="port">Port:</label>
+                                <input type="text" id="port" name="port" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-half p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="post" required>
+                                <label for="database">Database:</label>
+                                <input type="text" id="database" name="database" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-half p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="database Name" required>
+                            </div>
+                            <button type="submit" class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Connect</button>
+                            
+                        </form>
+                     
+                       </div>
+                   </label>     
+
+
+                <div class="chat-log" id="chat-log">
+                   <div id="llm-typing-spinner" class="spinner-container" style="display: none;">
+                       <div class="spinner"></div>
+                       <span>Generating response...</span>
+                     </div>
+                   <!-- Chat bubbles will be appended here -->
+                 </div>
+           </div>
+          
+
+           <div id="query-section" class="prompt-box">
+               <div class="prompt-box-layer">
+
+                   <!-- prompt input box -->
+                   
+                   <div class="prompt-input">
+                       <input type="text" id="query-input" placeholder="Enter your question" autocomplete="off">
+                   </div>
+
+                   <div class="prompt-action-box">
+                       <ul>
+                           <li>
+                               <button class="new-fileBtn" id="query-btn">
+                                   <div class="submit-icon">
+                                       <i class="fi fi-rr-paper-plane submit-icon"></i>
+                                   </div>
+                                   <span class="loader"></span>
+                               </button>
+                               <div class="tooltip prompt-tip">Submit</div>
+                           </li>
+                       </ul>
+                   </div>
+       </div>
+       <div class="info-text">
+           <p>Xplora may display inaccurate info, so verify its responses.</p>
+       </div>
+</div>
+   </div>
+   {% csrf_token %}
+   <script src="{% static 'js/scriptdata.js' %}"></script>
+   {% endblock content %}
+
+
+
+
+{% comment %} <!DOCTYPE html>
+<html>
+<head>
+    <title>Connect to Database</title>
+</head>
+<body>
+
+    {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+    <h1>Connect to Database</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Connect</button>
+    </form>
+</body>
+</html> {% endcomment %}

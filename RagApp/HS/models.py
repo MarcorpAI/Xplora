@@ -10,6 +10,20 @@ file_validator = FileExtensionValidator(['docx', 'pdf', 'xlsx', 'txt', 'csv'])
 
 
 User = get_user_model()
+
+
+
+
+# code for file size limit 
+def file_size_validator(value):  # value is the FileField instance
+    filesize = value.size  # file size in bytes
+    max_size = 1 * 1024 * 1024  # Define the maximum size as 5MB (adjust as needed)
+    
+    if filesize > max_size:
+        raise ValidationError(f"File size exceeds the maximum allowed size of {max_size} bytes.")
+
+
+
 #custom code to validate file mime types
 def validate_file_mimetype(file):
     accept = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -21,7 +35,7 @@ def validate_file_mimetype(file):
 
 class DocumentUpload(models.Model):
     file_name = models.CharField(max_length=100, blank=True)
-    file_content = models.FileField(upload_to='uploads/', validators=[file_validator, validate_file_mimetype])
+    file_content = models.FileField(upload_to='uploads/', validators=[file_validator, validate_file_mimetype, file_size_validator])
     file_metadata = models.JSONField(blank=True, null=True)
 
 

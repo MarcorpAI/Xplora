@@ -21,6 +21,10 @@ import pinecone
 from langchain_community.document_loaders.csv_loader import CSVLoader, UnstructuredCSVLoader
 from langchain_experimental.agents.agent_toolkits import create_csv_agent
 import logging
+from langchain_community.utilities import SQLDatabase
+from langchain_community.docstore.document import Document
+from langchain_groq import ChatGroq
+
 logging.basicConfig(level=logging.DEBUG)
 
 
@@ -115,6 +119,8 @@ def get_openai_llm():
         llm (ChatOpenAI): An instance of the OpenAI language model for the LLM interface.
     """
     llm = ChatOpenAI(temperature=0)
+    # llm = ChatGroq(model="Llama3-70b-8192", temperature=0, groq_api_key="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")
+
 
     return llm
 
@@ -128,7 +134,7 @@ def get_openai_llm():
 
 
 
-def get_response_llm(llm, vector_store, question, file_id, metadata_filter=None):
+def get_response_llm(llm, vector_store, question, file_id, chat_history:list, metadata_filter=None):
     """
     Retrieves the answer to a question using a language model and a vector store.
 
@@ -147,18 +153,52 @@ def get_response_llm(llm, vector_store, question, file_id, metadata_filter=None)
         "filter": {"file_name": os.path.basename(file_id)}
     }
 
-    if metadata_filter:
-        search_kwargs["filter"].update(metadata_filter)
+    # if metadata_filter:
+    #     search_kwargs["filter"].update(metadata_filter)
+
+    prompt = f"""
+    you are a friendly AI assistant, users will ask questions about a file. 
+    Please make sure to through the files properly to retrieve information from the file based on the users query
+    for analysis tasks in csv and xlsx files you are going to make sure to analyze data properly, make sure not to show too much working in your response to avoid ambiguous response.
+    Also make sure to keep the chat history in mind while reponding to the questions.
+    
+    Conversation History: {chat_history}
+    Question: {question}
+    """
 
     chain = RetrievalQA.from_chain_type(
-        llm=llm,
-        chain_type="stuff",
-        retriever=vector_store.as_retriever(search_type="similarity", search_kwargs=search_kwargs)
-    )
+            llm=llm,
+            chain_type="stuff",
+            retriever=vector_store.as_retriever(search_type="similarity", search_kwargs=search_kwargs))
 
-    answer = chain.invoke({"query": question})
+    answer = chain.invoke({
+        "query": prompt,
+        "chat_history":chat_history
+        })
 
     return answer
+
+
+
+
+
+
+def format_answer(answer):
+    """
+    Formats the LLM response to include bullet points or other dynamic text elements.
+
+    Args:
+        answer (str): The raw answer from the LLM.
+
+    Returns:
+        str: The formatted answer.
+    """
+    # Simple example of formatting with bullet points
+    formatted_answer = answer.replace('\n', '\n- ')
+    if not formatted_answer.startswith('- '):
+        formatted_answer = '- ' + formatted_answer
+
+    return formatted_answer
 
 
 
@@ -249,6 +289,20 @@ def data_ingestion_csv(file_path:str):
         
         
 
-    
+
+def queryCSV(llm, question: str, file_path):
+    # Query csv 
+    try:
+        file_path=file_path
+        agent = create_csv_agent(llm=llm, path=file_path, verbose=True)
+        result = agent.invoke(prompt)
+        res = json.dumps(result)
+        return res
+    except Exception as e:
+        print(e)
+
+
+
+
 
 

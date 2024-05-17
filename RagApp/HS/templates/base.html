@@ -9,6 +9,14 @@
 <body>
     {% include 'nav.html' %}
 
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
     <!-- Content block for child templates to override -->
     <div id="content">
         {% block content %}
@@ -16,5 +24,7 @@
 
         {% endblock %}
     </div>
+    {% comment %} <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script> {% endcomment %}
+    {% comment %} <script src="https://cdn.tailwindcss.com"></script> {% endcomment %}
 </body>
 </html>

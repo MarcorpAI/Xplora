@@ -94,7 +94,7 @@ ROOT_URLCONF = 'RagApp.urls'
 
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
-SESSION_COOKIE_NAME = 'custom_key'
+SESSION_COOKIE_NAME = 'sessionid'
 
 TEMPLATES = [
     {

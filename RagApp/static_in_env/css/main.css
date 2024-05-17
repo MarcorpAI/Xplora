@@ -263,6 +263,18 @@ body {
 
 
 
+.form-inputs-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  
+  .form-inputs-container > div {
+    flex: 0 0 48%;
+    margin-bottom: 1rem;
+  }
+
+
 
 /* Add these styles to your CSS file (main.css) */
 
