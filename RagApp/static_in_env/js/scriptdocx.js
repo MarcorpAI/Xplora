@@ -9,19 +9,17 @@ document.addEventListener("DOMContentLoaded", function () {
   let csrftokenmiddlewaretoken = document.querySelector("input[type=hidden]");
   const csrfToken = csrftokenmiddlewaretoken ? csrftokenmiddlewaretoken.value : null;
   console.log(csrfToken);
+  let showTimeout, hideTimeout;
 
   uploadBtn.addEventListener("click", () => {
-    const file_name = name;
     const file = fileInput.files[0];
     if (file) {
       const formData = new FormData();
       formData.append("file_content", file);
-
-
+  
       const fileUploadSpinner = document.getElementById("file-upload-spinner");
       fileUploadSpinner.style.display = "flex";
-
-
+  
       fetch("http://127.0.0.1:8000/uploaddocx_view/", {
         method: "POST",
         body: formData,
@@ -29,23 +27,63 @@ document.addEventListener("DOMContentLoaded", function () {
           "X-CSRFToken": csrfToken,
         },
       })
-        .then((response) => {
-
-          fileUploadSpinner.style.display = "none";
-
-          if (response.ok) {
-            uploadStatus.textContent = "File uploaded successfully!";
-          } else {
-            uploadStatus.textContent = "Error uploading file.";
-          }
-        })
-        .catch((error) => {
-
-          fileUploadSpinner.style.display = "none";
-          uploadStatus.textContent = "Error uploading file: " + error;
-        });
+      .then((response) => {
+        fileUploadSpinner.style.display = "none";
+  
+        if (response.ok) {
+          clearTimeout(showTimeout);
+          clearTimeout(hideTimeout);
+  
+          uploadStatus.innerHTML = "<p class='success'>File uploaded successfully!</p>";
+          uploadStatus.classList.add("show");
+  
+          showTimeout = setTimeout(() => {
+            uploadStatus.classList.remove("show");
+            uploadStatus.classList.add("fadeOut");
+  
+            hideTimeout = setTimeout(() => {
+              uploadStatus.classList.remove("fadeOut");
+              uploadStatus.innerHTML = "";
+            }, 500);
+          }, 3000);
+        } else {
+          clearTimeout(showTimeout);
+          clearTimeout(hideTimeout);
+  
+          uploadStatus.innerHTML = "<p class='error'>Error uploading file.</p>";
+          uploadStatus.classList.add("show");
+  
+          showTimeout = setTimeout(() => {
+            uploadStatus.classList.remove("show");
+            uploadStatus.classList.add("fadeOut");
+  
+            hideTimeout = setTimeout(() => {
+              uploadStatus.classList.remove("fadeOut");
+              uploadStatus.innerHTML = "";
+            }, 500);
+          }, 3000);
+        }
+      })
+      .catch((error) => {
+        fileUploadSpinner.style.display = "none";
+        uploadStatus.innerHTML = "<p class='error'>Error uploading file: " + error + "</p>";
+      });
     } else {
-      uploadStatus.textContent = "Please select a file to upload.";
+      clearTimeout(showTimeout);
+      clearTimeout(hideTimeout);
+  
+      uploadStatus.innerHTML = "<p class='error'>Please select a file to upload.</p>";
+      uploadStatus.classList.add("show");
+  
+      showTimeout = setTimeout(() => {
+        uploadStatus.classList.remove("show");
+        uploadStatus.classList.add("fadeOut");
+  
+        hideTimeout = setTimeout(() => {
+          uploadStatus.classList.remove("fadeOut");
+          uploadStatus.innerHTML = "";
+        }, 500);
+      }, 3000);
     }
   });
 

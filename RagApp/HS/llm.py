@@ -14,7 +14,8 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain_core.prompts import ChatPromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate,AIMessagePromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.messages import AIMessage, HumanMessage
-from langchain.chains.question_answering import StuffDocumentsChain
+# from langchain.chains.question_answering import StuffDocumentsChain
+from langchain.chains.combine_documents.stuff import StuffDocumentsChain # added this line and commennted the out the line above
 from langchain_core.load.serializable import Serializable
 import os
 import pinecone
