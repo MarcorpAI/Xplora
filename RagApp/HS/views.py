@@ -411,9 +411,10 @@ class QueryCSV(APIView):
             
 
             chat_history = request.session.get('chat_history', [])
-            chat_history = chat_history[-20:]
+            # chat_history = chat_history[-20:]
             
-            answer = get_response_llm(llm, vector_store, query, os.path.basename(temp_file_path), chat_history, metadata_filter)
+            answer = get_response_llm(llm, vector_store, query, os.path.basename(temp_file_path), [], metadata_filter)
+
 
             chat_history = json.loads(request.session.get('chat_history', '[]'))
             chat_history.append((query, answer))
