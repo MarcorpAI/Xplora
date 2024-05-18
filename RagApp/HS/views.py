@@ -11,7 +11,7 @@ from django.http import HttpResponseBadRequest, JsonResponse, HttpResponseServer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
-import json
+import json 
 import os
 from django.core.files.storage import FileSystemStorage
 from django.template.response import TemplateResponse
@@ -95,6 +95,13 @@ and the second view handles the file interaction. when a file upload is successf
 
 
 
+# index page view - added this index page
+class IndexView(APIView):
+    template_name = 'index.html'
+    redirect_field_name = 'next'
+
+    def get(self, request):
+        return TemplateResponse(request, self.template_name)
 
 
 

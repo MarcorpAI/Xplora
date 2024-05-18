@@ -4,6 +4,9 @@ from .views import QueryPDF, PDFView, XLSXView, QueryXLSX, DOCXView, QueryDocx, 
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
+    # index page
+    path('', views.IndexView.as_view(), name='index'),
+    
     # path('accounts/login/', auth_views.LoginView.as_view(), name='login'),
 
     # # Urls for PDF upload and querying
