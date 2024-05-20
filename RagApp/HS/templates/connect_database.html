@@ -3,14 +3,7 @@
 {% block content %}
 <div class="main-box">
        <div class="main-box-layer">
-
            <div class="chat-box">             
-               {% comment %} <div id="output">   
-               </div> {% endcomment %}
-
-                
-                   {% comment %} <label for="file-input"> {% endcomment %}
-<div class="p-4 sm:ml-64">
                         <form id="connection-form">
                             {% csrf_token %}
 
@@ -18,17 +11,16 @@
                                 <!-- Form inputs here -->
 
                                 <label for="user">User:</label>
-                                <input type="text" id="user" name="user" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-half p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="root" required>
+                                <input type="text" id="user" name="user" placeholder="root" required>
                                 <label for="password">Password:</label>
-                                <input type="password" id="password" name="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-half p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="•••••••••" required>
-                                <label for="host">Host:</label>
-                                <input type="text" id="host" name="host" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-half p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="localhost" required>
+                                <input type="password" id="password" name="password">
+                                <input type="text" id="host" name="host" placeholder="localhost" required>
                                 <label for="port">Port:</label>
-                                <input type="text" id="port" name="port" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-half p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="post" required>
+                                <input type="text" id="port" name="port" placeholder="port" required>
                                 <label for="database">Database:</label>
-                                <input type="text" id="database" name="database" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-half p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="database Name" required>
+                                <input type="text" id="database" name="database" placeholder="database Name" required>
                             </div>
-                            <button type="submit" class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Connect</button>
+                            <button type="submit" class="btn-text">Connect</button>
                             
                         </form>
                      
