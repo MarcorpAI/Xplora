@@ -148,7 +148,7 @@ FILE_UPLOAD_PERMISSIONS = 0o644
 
 
 
-LOGIN_REDIRECT_URL = '/uploadpdf_view/'
+LOGIN_REDIRECT_URL = '/chatwfile/'
 
 
 

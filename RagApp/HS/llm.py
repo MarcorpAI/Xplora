@@ -25,6 +25,7 @@ import logging
 from langchain_community.utilities import SQLDatabase
 from langchain_community.docstore.document import Document
 from langchain_groq import ChatGroq
+from langchain.output_parsers.structured import StructuredOutputParser, ResponseSchema
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -119,8 +120,8 @@ def get_openai_llm():
     Returns:
         llm (ChatOpenAI): An instance of the OpenAI language model for the LLM interface.
     """
-    llm = ChatOpenAI(temperature=0)
-    # llm = ChatGroq(model="Llama3-70b-8192", temperature=0, groq_api_key="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")
+    # llm = ChatOpenAI(temperature=0)
+    llm = ChatGroq(model="Llama3-70b-8192", temperature=0, groq_api_key="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")
 
 
     return llm
@@ -154,8 +155,12 @@ def get_response_llm(llm, vector_store, question, file_id, chat_history:list, me
         "filter": {"file_name": os.path.basename(file_id)}
     }
 
-    # if metadata_filter:
-    #     search_kwargs["filter"].update(metadata_filter)
+    response_schemas = [
+        ResponseSchema(name="response", description="The formatted response", type="string")
+    ]
+
+    parser = StructuredOutputParser.from_response_schemas(response_schemas)
+    format_instructions = parser.get_format_instructions()
 
     prompt = f"""
     you are a friendly AI assistant, users will ask questions about a file. 
@@ -170,7 +175,9 @@ def get_response_llm(llm, vector_store, question, file_id, chat_history:list, me
     chain = RetrievalQA.from_chain_type(
             llm=llm,
             chain_type="stuff",
-            retriever=vector_store.as_retriever(search_type="similarity", search_kwargs=search_kwargs))
+            retriever=vector_store.as_retriever(search_type="similarity", search_kwargs=search_kwargs)
+
+            )
 
     answer = chain.invoke({
         "query": prompt,
@@ -178,8 +185,6 @@ def get_response_llm(llm, vector_store, question, file_id, chat_history:list, me
         })
 
     return answer
-
-
 
 
 

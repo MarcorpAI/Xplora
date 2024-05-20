@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const formData = new FormData(connectionForm);
       formData.append("csrfmiddlewaretoken", csrfToken);
   
-      fetch("http://127.0.0.1:8000/connect1/", {
+      fetch("http://127.0.0.1:8000/askdatabase/", {
         method: "POST",
         body: formData,
         headers: {
