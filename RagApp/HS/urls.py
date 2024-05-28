@@ -1,11 +1,11 @@
 from django.urls import path
 from . import views
-from .views import QueryFile, UploadView, DatabaseConnectionView, QueryDatabaseView
+from .views import QueryFile, UploadView, DatabaseConnectionView, QueryDatabaseView, IndexView
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     # index page
-    path('', views.IndexView.as_view(), name='index'),
+    path('', IndexView.as_view(), name='index'),
     
     # path('accounts/login/', auth_views.LoginView.as_view(), name='login'),
 

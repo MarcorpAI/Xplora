@@ -95,17 +95,11 @@ document.addEventListener("DOMContentLoaded", function () {
       formData.append("file_content", file);
       formData.append("question", query);
 
-      
       const userMessage = document.createElement("div");
       userMessage.classList.add("user-message");
       userMessage.textContent = query;
       chatLog.appendChild(userMessage);
-
-       
       queryInput.value = ""; // Clear the message box after sending
-
-
-
 
       const llmTypingSpinner = document.getElementById("llm-typing-spinner");
       llmTypingSpinner.style.display = "flex";
@@ -158,4 +152,3 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
-

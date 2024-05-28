@@ -1,23 +1,12 @@
-// Select all elements with the class '.new-fileBtn'
-var newFileBtns = document.querySelectorAll('.new-fileBtn');
+document.addEventListener('DOMContentLoaded', function () {
+    const sidebar = document.getElementById('sidebar');
+    const openSidebarBtn = document.getElementById('openSidebarBtn');
 
-// Loop through each element and attach mouseover and mouseout event listeners
-newFileBtns.forEach(newFileBtn => {
-    newFileBtn.addEventListener('mouseover', () => {
-        // Select the corresponding tooltip element
-        var tooltip = newFileBtn.nextElementSibling;
-
-        // Add the class 'hovered' to the tooltip element
-        tooltip.classList.add('hovered');
-    });
-
-    newFileBtn.addEventListener('mouseout', () => {
-        // Select the corresponding tooltip element
-        var tooltip = newFileBtn.nextElementSibling;
-
-        // Remove the class 'hovered' from the tooltip element
-        tooltip.classList.remove('hovered');
+    openSidebarBtn.addEventListener('click', function () {
+        if (sidebar.classList.contains('open')) {
+            sidebar.classList.remove('open');
+        } else {
+            sidebar.classList.add('open');
+        }
     });
 });
-
-

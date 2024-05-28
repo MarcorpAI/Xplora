@@ -42,7 +42,7 @@ and the second view handles the file interaction. when a file upload is successf
 
 # index page view - added this index page
 class IndexView(APIView):
-    template_name = 'index.html'
+    template_name = 'HS/index.html'
     redirect_field_name = 'next'
 
     def get(self, request):
@@ -105,7 +105,7 @@ def ingest_file(file_path, file_extension):
 
 
 class UploadView(LoginRequiredMixin, APIView):
-    template_name = 'work.html'
+    template_name = 'HS/excel1.html'
     redirect_field_name = 'next'
 
     def get(self, request):
@@ -170,12 +170,12 @@ class QueryFile(APIView):
 
 class DatabaseConnectionView(LoginRequiredMixin,APIView):
     redirect_field_name = 'next'
-    template_name = 'connect_database.html'
+    template_name = 'HS/connect_database.html'
 
 
     def get(self, request):
         database_form = DatabaseConnectionForm()
-        return render(request, 'connect_database.html', {'database_form': database_form})
+        return render(request, 'HS/connect_database.html', {'database_form': database_form})
 
     def post(self, request):
         database_form = DatabaseConnectionForm(request.POST)
@@ -221,12 +221,12 @@ class QueryDatabaseView(APIView):
 
                     chat_history = request.session.get('chat_history', [])
                     chat_history = chat_history[-5:]
-                    response = get_response(question, db, chat_history)
+                    answer = get_response(question, db, chat_history)
 
-                    chat_history.append((question, response))
+                    chat_history.append((question, answer))
 
                     request.session['chat_history'] = chat_history
-                    return Response({'status': 'success', 'response': response})
+                    return Response({'status': 'success', 'response': answer})
                 except Exception as e:
                     return Response({'status': 'error', 'message': f'Error executing query: {e}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             else:

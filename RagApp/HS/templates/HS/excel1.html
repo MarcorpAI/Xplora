@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "HS/base.html" %}
 
 {% load static %}
 {% block content %}
@@ -26,10 +26,10 @@
                         </label>
 
                         <div class="upload-text">
-                            <p> Select or drag a file here. </p>
+                            <p>Click to Select file</p>
                         </div>
 
-                        <input type="file" id="file-input" name="file_content">
+                        <input type="file" id="file-input" name="file_content" accept=".xlsx">
 
                         <button id="upload-btn"><span class="btn-text">Upload File</span> <span class="loader"></span> </button>
 
@@ -76,7 +76,7 @@
                 </div>
             </div>
             <div class="info-text">
-                <p>MarcorpAI may display inaccurate info, so verify its responses.</p>
+                <p>Xplora may display inaccurate info, so verify its responses.</p>
             </div>
         </div>
 

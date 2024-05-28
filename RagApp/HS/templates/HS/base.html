@@ -1,9 +1,9 @@
 <!-- base.html -->
-
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
-    {% include 'head.html' %}
+    {% include 'HS/head.html' %}
 </head>
 
 <body>
@@ -11,7 +11,7 @@
     <!-- message box | show all messages here -->
     <div id="upload-status" class="message-box"></div>
 
-    {% include 'nav.html' %}
+    {% include 'HS/nav.html' %}
 
     {% if messages %}
     <ul class="messages">
@@ -28,7 +28,6 @@
 
         {% endblock %}
     </div>
-    {% comment %} <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script> {% endcomment %}
-    {% comment %} <script src="https://cdn.tailwindcss.com"></script> {% endcomment %}
+    <script>{% static "nav.js" %}</script>
 </body>
 </html>

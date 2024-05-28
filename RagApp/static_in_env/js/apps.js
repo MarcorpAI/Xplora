@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
         fileUploadSpinner.style.display = "flex";
         buttonText.style.display = "none";
   
-        fetch("http://127.0.0.1:8000/uploaddocx_view/", {
+        fetch("http://127.0.0.1:8000/chatwfile/", {
           method: "POST",
           body: formData,
           headers: {
@@ -239,7 +239,7 @@ document.addEventListener("DOMContentLoaded", function () {
         queryInput.value = ""; // Clear the message box after sending
   
   
-        fetch("http://127.0.0.1:8000/querydocx_view/", {
+        fetch("http://127.0.0.1:8000/queryfile_view/", {
           method: "POST",
           body: formData,
           headers: {

@@ -96,10 +96,12 @@ def get_response(user_question:str, db:SQLDatabase, chat_history:list):
         | StrOutputParser()
     )
 
-    return chain.invoke({
+    answer =  chain.invoke({
         "question": user_question,
         "chat_history": chat_history,
     })
+    
+    return str(answer)
 
 
 

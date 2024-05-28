@@ -1,7 +1,10 @@
 {% load static %}
+{% load static tailwind_tags %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% tailwind_css %}
     <meta charset="UTF-8">
     <title>{% block head_title %}{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/login.css' %}">

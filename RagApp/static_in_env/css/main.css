@@ -1,6 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap'); */
 
+ 
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;500&display=swap');
 * {
     padding: 0;
     margin: 0;
@@ -10,6 +12,8 @@
 #feedbackContainer {
     /* display: none; */
 }
+
+
 
 :root {
     /* --mainBG: #262626; */
@@ -32,7 +36,7 @@
 }
 
 body {
-    font-family: Open Sans, sans-serif;
+    font-family: Poppins, sans-serif;
     background-color: var(--mainBG);
     color: var(--mainTextColor);
 }
@@ -129,12 +133,11 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* border: 1px solid #ed2c2c; */
+    
     height: 100%;
 }
 
 .sidebar-openBtn {
-    /* border: 1px solid red; */
     height: fit-content;
     margin: 15px 0 45px 0;
     height: 48px;
@@ -158,8 +161,15 @@ body {
     color: var(--headText);
 }
 
-.sidebar-options-box {
-    /* border: 1px solid red; */
+.sidebar-options-box a{
+    text-decoration: none;
+    
+}
+
+
+
+.sidebar-footer-box a{
+    text-decoration: none;
 }
 
 .sidebar-options-box ul li {
@@ -189,8 +199,191 @@ body {
 .sidebar-options-box ul li button i {
     position: relative;
     top: 1px;
-    font-size: 1rem;
+    font-size: 1.7rem;
 }
+
+
+
+.sidebar-footer-tip {
+    top: 50%;
+    transform: translateY(-50%);
+    left: 120%;
+    height: 25px;
+}
+
+
+
+
+
+
+
+
+
+
+
+.sidebar.close{
+    width: 88px;
+
+}
+
+
+.sidebar .text{
+    font-size: 20px;
+    font-weight: 400;
+}
+
+
+
+
+.sidebar.close .text{
+    opacity: 0;
+}
+
+
+.sidebar .image{
+    min-width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sidebar{
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 250px;
+    padding: 10px 14px;
+    background: var(--sidebarBG);
+}
+
+.sidebar li{
+    height: 50px;
+    margin-top: 10px;
+    list-style: none;
+    display: flex;
+    align-items: center;
+}
+
+ 
+.sidebar li .icon{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 60px;
+    font-size: 20px;
+
+    
+}
+
+
+.sidebar li .icon,
+.sidebar li .text{
+    color: var(--sidebarBtnColor);
+}
+
+.sidebar header{
+    position: relative;
+}
+
+
+.sidebar header .image-text{
+    display: flex;
+    align-items: center;
+}
+
+
+.sidebar .image-text img{
+    width: 40px;
+    border-radius: 6px;
+    background: var(--sidebarBtnColor);
+}
+
+
+.sidebar header .image-text{
+    display: flex;
+    align-items: center;
+}
+
+
+header .image-text .header-text{
+    display: flex;
+    flex-direction: column;
+}
+
+
+.header-text .name{
+    font-weight: 700;
+
+
+}
+
+.sidebar header .toggle{
+    position: absolute;
+    top: 50%;
+    right: -25px;
+    transform: translateY(-50%);
+    height: 25px;
+    width: 25px;
+    background-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 22px;
+
+}
+
+
+.sidebar li a{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.sidebar li a:hover{
+    background: white;
+
+}
+
+.sidebar li a:hover .icon,
+.sidebar li a:hover .text{
+    color: var(--sidebarBtnColor);
+    transition: all 0.2s ease;
+
+}
+
+.sidebar .menu-bar{
+    height: calc(100% - 5px);
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    justify-content: space-between;
+
+}
+
+
+.sidebar .bottom-content {
+    border-top: 1px solid var(--sidebarBtnColor);
+    padding-top: 10px;
+    margin-top: auto
+}
+
+ 
+
+
+
+
+
+
+
+
+
+
 
 .tooltip {
     position: absolute;
@@ -205,20 +398,17 @@ body {
     opacity: 0;
 }
 
-.sidebar-footer-tip {
-    top: 50%;
-    transform: translateY(-50%);
-    left: 120%;
-    height: 25px;
-}
+
+
+
 
 .prompt-upload-tip {
     top: -75%;
     height: 25px;
 }
 
-#document {
-    display: none;
+.document {
+    display: flex;
 }
 
 .prompt-tip {
@@ -294,7 +484,7 @@ body {
     position: relative;
     /* border: 1px solid blue; */
     height: 100%;
-    width: ;
+    width: 100%;
 }
 
 .prompt-box {
@@ -309,18 +499,46 @@ body {
 }
 
 
-
-.form-inputs-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+/* Style the input fields */
+#connection-form input[type=text],
+#connection-form input[type=password] {
+    background-color: transparent; /* Transparent background */
+    color: white; /* Set the desired text color */
+    padding: 12px 20px;
+    margin: 8px 4px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    box-sizing: border-box;
+    font-size: 16px;
 }
 
-.form-inputs-container>div {
-    flex: 0 0 48%;
-    margin-bottom: 1rem;
+/* Style the input fields on focus */
+#connection-form input[type=text]:focus,
+#connection-form input[type=password]:focus {
+    outline: none;
+    border: 1px solid #4CAF50;
 }
 
+/* Style the submit button */
+#connection-form button[type=submit] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 20px; /* Rounded corners for the button */
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    display: block; /* Make the button a block element */
+    margin: 0 auto; /* Center the button horizontally */
+}
+
+/* Style the submit button on hover */
+#connection-form button[type=submit]:hover {
+    background-color: #45a049;
+}
 
 
 /* Add these styles to your CSS file (main.css) */
@@ -334,43 +552,21 @@ body {
 }
 
 .user-message {
-<<<<<<< HEAD
     background-color: #2f2f2f !important;
     color: #e6e6e6;
     padding: 10px 20px;
     border-radius: 30px 30px 5px 30px;
     max-width: 90%;
-=======
-    background-color: #2b2b2b !important;
-    /* Darker shade for user message */
-    color: #fff;
-    /* White text */
-    padding: 12px 16px;
-    border-radius: 20px 20px 0 20px;
-    /* Different border-radius for user message */
-    max-width: 50%;
->>>>>>> a576d953551ac1ae6d358348037d72deafbd55c2
     align-self: flex-end;
     font-size: 0.9rem;
 }
 
 .assistant-message {
-<<<<<<< HEAD
     background-color: #00000000 !important;
     color: #e6e6e6;
     padding: 10px 20px;
     border-radius: 30px 30px 30px 0px;
     max-width: 90%;
-=======
-    background-color: #272727 !important;
-    /* Slightly lighter shade for assistant message */
-    color: #fff;
-    /* White text */
-    padding: 12px 16px;
-    border-radius: 20px 20px 20px 0;
-    /* Different border-radius for assistant message */
-    max-width: 50%;
->>>>>>> a576d953551ac1ae6d358348037d72deafbd55c2
     align-self: flex-start;
     font-size: 0.9rem;
     line-height: 1.5;
@@ -380,7 +576,7 @@ body {
 
 
 .spinner-container {
-    position: relative;
+    position: center;
     margin: 0 0 0 100px;
 }
 
@@ -462,6 +658,10 @@ body {
     justify-content: center;
     cursor: pointer;
     /* box-shadow: 0 0 5px #0000001b; */
+}
+
+.file-upload-box h1{
+    margin-bottom: 20px;
 }
 
 .prompt-upload-box-title p {
@@ -678,8 +878,8 @@ body {
     color: #171717;
 }
 
-#upload-btn {
-    display: none;
+.upload-btn {
+    display: flex;
 }
 
 .file-upload-box {
@@ -737,12 +937,15 @@ body {
     border: 1px solid var(--mainTextColor);
 }
 
+
 .btn-text {
-    /* display: none; */
+    color: white;
 }
 
+
+
 .file-name {
-    position: absolute;
+    position: absolute !important;
     top: 5px;
     left: 5px;
     font-size: 0.85rem;
@@ -801,6 +1004,9 @@ body {
 .upload-fileBtn ul li button i {
     margin-left: 10px;
 }
+
+
+
 
 @media (max-width: 600px) {
     .navbar-box {

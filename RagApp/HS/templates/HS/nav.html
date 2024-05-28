@@ -1,0 +1,107 @@
+{% load static %}
+<div class="navbar-box">
+    <div class="navbar-box-layer">
+
+        <div class="nav-option-box">
+            <h2><a href="/"> MarcorpAI</a></h2>
+        </div>
+
+        <div class="nav-account-option-box">
+            <div class="nav-account-img">
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Sidebar -->
+<div class="sidebar-box">
+    <div class="sidebar-box-layer">
+
+        <div class="sidebar-openBtn">
+            <img src="{% static 'images/recc.png' %}" alt="Logo">
+
+        </div>
+
+
+
+        <div class="sidebar-options-box">
+            <ul>
+                <li>
+                    <a href="/">
+                        <button class="new-fileBtn">
+                            <i class='bx bx-home-alt icon'></i>
+                        </button>
+                        <div class="tooltip">Home</div>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url "db_connect" %}">
+                        <button class="new-fileBtn">
+                            <i class='bx bxs-data icon'></i>
+                        </button>
+                        <div class="tooltip">ask Database</div>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{% url "uploadfile_view" %}">
+                        <button class="new-fileBtn">
+                            <i class='bx bx-file-find'></i>
+                        </button>
+                        <div class="tooltip">ask Database</div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sidebar-footer-box">
+            <ul>
+                <li>
+                    <a href="/faq">
+                        <button class="new-fileBtn">
+                            <i class="fi fi-rr-interrogation"></i>
+                        </button>
+                        <div class="tooltip sidebar-footer-tip">FAQ</div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/settings">
+                        <button class="new-fileBtn">
+                            <i class="fi fi-rr-settings"></i>
+                        </button>
+                        <div class="tooltip sidebar-footer-tip">Settings</div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        {% comment %} <div class="sidebar-options-box">
+            <ul>
+                <li>
+                    <button class="new-fileBtn"><i class='bx bx-home-alt icon' ></i></button>
+                    <div class="tooltip">New chat</div>
+                </li>
+                <li>
+                    <button class="new-fileBtn"><i class='bx bxs-data icon'></i></button>
+                    <div class="tooltip">Chat history</div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sidebar-footer-box">
+            <ul>
+                <li>
+                    <button class="new-fileBtn"><i class="fi fi-rr-interrogation"></i></button>
+                    <div class="tooltip sidebar-footer-tip">FAQ</div>
+                </li>
+                <li>
+                    <button class="new-fileBtn"><i class="fi fi-rr-settings"></i></button>
+                    <div class="tooltip sidebar-footer-tip">Settings</div>
+                </li>
+            </ul>
+        </div>
+
+    </div> {% endcomment %}
+</div>
