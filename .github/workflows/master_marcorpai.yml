@@ -27,6 +27,12 @@ jobs:
         run: |
           python -m venv venv
           source venv/bin/activate
+
+      - name: Debug Python version and pip
+        run: |
+          python --version
+          pip --version
+          pip list
       
       - name: Install dependencies
         run: pip install -r requirements.txt
