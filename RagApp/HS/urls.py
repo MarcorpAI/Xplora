@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import QueryFile, UploadView, DatabaseConnectionView, QueryDatabaseView, IndexView
+from .views import QueryFile, UploadView, DatabaseConnectionView, QueryDatabaseView, IndexView, PostgreSQLView, QueryPostgres
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
@@ -18,6 +18,10 @@ urlpatterns = [
 
     path('askdatabase/', DatabaseConnectionView.as_view(), name='db_connect'),
     path('query/', QueryDatabaseView.as_view(), name='db_query'),
+
+    path('askpostgres/', PostgreSQLView.as_view(), name='db_postgres'),
+    path('querypost/', QueryPostgres.as_view(), name='post_query'),
+
 
     # path('query/', QueryDBView.as_view(), name='db_query'),
 

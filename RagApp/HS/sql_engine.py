@@ -12,6 +12,8 @@ from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
 from langchain_groq import ChatGroq
 from langchain_core.output_parsers import BaseOutputParser
+from sqlalchemy import create_engine
+from sqlalchemy.pool import QueuePool
 
 
 from dotenv import load_dotenv
@@ -30,7 +32,10 @@ def get_sql_chain(db):
     template = """
         You are a data analyst at a data company, You are interacting with a user who is asking you questions about the company's database.
         Based on the table schema below, write a SQL query that would answer the users's question and give the user the answer to the question he or she has asked, Take the conversation history into account.
-        You do not have to show the SQL query you ran to get the response
+        You do not have to show the SQL query you ran to get the response.
+        before you answer any questions, think deep, think deeply 
+        and take not of spacing in your response. take note of new lines and give a well structured response in your answers .
+        do not give jampackked answers
 
 
         <SCHEMA>{schema}<SCHEMA>
@@ -110,5 +115,17 @@ def get_response(user_question:str, db:SQLDatabase, chat_history:list):
 def init_database(user:str, password:str, host:str, port:str, database:str) -> SQLDatabase:
     db_uri = f"mysql+mysqlconnector://{user}:{password}@{host}:{port}/{database}"
     return SQLDatabase.from_uri(db_uri)
+
+
+
+
+def init_database_postgres(user:str, password:str, host:str, port:str, database:str) -> SQLDatabase:
+    try:
+        db_uri = f"postgresql+psycopg2://{user}:{password}@{host}:{port}/{database}"
+        engine = create_engine(db_uri, poolclass=QueuePool)
+        return SQLDatabase(engine)
+    except Exception as e:
+        print(f"Error initializing database: {e}")
+        raise
 
 

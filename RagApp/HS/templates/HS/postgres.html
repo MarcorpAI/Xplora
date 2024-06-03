@@ -1,0 +1,83 @@
+{% extends "Hs/base.html" %}
+
+{% load static %}
+{% block content %}
+
+<div class="main-box">
+    <div class="main-box-layer">
+
+        <div class="chat-box">
+            {% comment %} <div id="output">
+            </div> {% endcomment %}
+
+            <div class="chat-box-layer" id="chatLayer">
+                <label for="file-input">
+
+
+                    <div id="file-upload-spinner" class="spinner-container" style="display: none;">
+                        <div class="spinner"></div>
+                        <span>connecting....</span>
+                    </div>
+                    <div id="file-upload" class="file-upload-box">
+                        <span class="file-name" id="fileNames"></span>
+                <h1 >Postgresql 🐘</h1>
+
+                        <form id="connection-form" >
+                            {% csrf_token %}
+                    
+                                <input type="text" id="user" name="user" placeholder="root" required>
+                                <input type="password" id="password" placeholder="password" name="password">
+                                <input type="text" id="host" name="host" placeholder="localhost" required>
+                                 
+                                <input type="text" id="port" name="port" placeholder="port" required>
+                                
+                                <input type="text" id="database" name="database" placeholder="database Name" required>
+                        <button id="upload-btn"><span class="btn-text">connect</span> <span class="loader"></span> </button>      
+                        </form>
+
+
+                    </div>
+                </label>
+            </div>
+
+            <div class="chat-log" id="chat-log">
+                <div id="llm-typing-spinner" class="spinner-container" style="display: none;">
+                    <div class="spinner"></div>
+                    <span>Thinking.....</span>
+                </div>
+                <!-- Chat bubbles will be appended here -->
+            </div>
+        </div>
+
+
+        <div id="query-section" class="prompt-box">
+            <div class="prompt-box-layer">
+
+                <!-- prompt input box -->
+                <div class="prompt-input">
+                    <input type="text" id="query-input" placeholder="Enter your question" autocomplete="off">
+                </div>
+
+                <div class="prompt-action-box">
+                    <ul>
+                        <li>
+                            <button class="new-fileBtn" id="query-btn">
+                                <div class="submit-icon">
+                                    <i class="fi fi-rr-paper-plane submit-icon"></i>
+                                </div>
+                                <span class="loader"></span>
+                            </button>
+                            <div class="tooltip prompt-tip">Submit</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="info-text">
+                <p>MarcorpAI may display inaccurate info, so verify its responses.</p>
+            </div>
+        </div>
+        <div id="upload-status" class="status-box"></div>
+
+        {% csrf_token %}
+        <script src="{% static 'js/postgres.js' %}"></script>
+        {% endblock content %} 

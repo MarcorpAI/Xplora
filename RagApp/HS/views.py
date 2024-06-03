@@ -6,7 +6,7 @@ from.llm import data_ingestion_txt, get_embeddings, get_openai_llm, get_response
 from django.contrib import messages
 from django.views.decorators.http import require_http_methods 
 from django.views.decorators.csrf import csrf_exempt 
-from .sql_engine import init_database, get_sql_chain, get_response
+from .sql_engine import init_database, get_sql_chain, get_response, init_database_postgres
 from django.http import HttpResponseBadRequest, JsonResponse, HttpResponseServerError, HttpResponseNotAllowed
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -218,6 +218,86 @@ class QueryDatabaseView(APIView):
                 try:
                     # Recreate the SQLDatabase object from session parameters
                     db = init_database(**db_params)
+
+                    chat_history = request.session.get('chat_history', [])
+                    chat_history = chat_history[-5:]
+                    answer = get_response(question, db, chat_history)
+
+                    chat_history.append((question, answer))
+
+                    request.session['chat_history'] = chat_history
+                    return Response({'status': 'success', 'response': answer})
+                except Exception as e:
+                    return Response({'status': 'error', 'message': f'Error executing query: {e}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            else:
+                return Response({'status': 'error', 'message': 'No active database connection.'}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({'status': 'error', 'message': 'Invalid form data.'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class PostgreSQLView(LoginRequiredMixin,APIView):
+    redirect_field_name = 'next'
+    template_name = 'HS/postgres.html'
+
+
+    def get(self, request):
+        database_form = DatabaseConnectionForm()
+        return render(request, 'HS/postgres.html', {'database_form': database_form})
+
+    def post(self, request):
+        database_form = DatabaseConnectionForm(request.POST)
+        if database_form.is_valid():
+            user = database_form.cleaned_data['user']
+            password = database_form.cleaned_data['password']
+            host = database_form.cleaned_data['host']
+            port = database_form.cleaned_data['port']
+            database = database_form.cleaned_data['database']
+
+            try:
+                # Store connection parameters in the session
+                request.session['db_params'] = {
+                    'user': user,
+                    'password': password,
+                    'host': host,
+                    'port': port,
+                    'database': database
+                }
+                # Inform user about successful connection
+
+                return Response({'status': 'success', 'message': 'Connection Successful!'})
+                message.success(request, "successful")
+            except Exception as e:
+                # Handle connection initialization error
+                messages.warning(request, f"Connection Failed! Error: {e}")
+                return Response({'status': 'error', 'message': f'Database connection failed: {e}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return Response({'status': 'error', 'message': 'Invalid form data.'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class QueryPostgres(APIView):
+    def post(self, request):
+        query_form = UserQueryForm(request.POST)
+        if query_form.is_valid():
+            question = query_form.cleaned_data['question']
+            # Retrieve connection parameters from the session
+            db_params = request.session.get('db_params')
+            if db_params:
+                try:
+                    # Recreate the SQLDatabase object from session parameters
+                    db = init_database_postgres(**db_params)
 
                     chat_history = request.session.get('chat_history', [])
                     chat_history = chat_history[-5:]

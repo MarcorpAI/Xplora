@@ -7,11 +7,12 @@ For more information on this file, see
 https://docs.djangoproject.com/en/5.0/howto/deployment/wsgi/
 """
 
+settings_module = 'RagApp.deployment' if 'WEBSITE_HOSTNAME' in os.environ else 'RagApp.settings'
+
 import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'RagApp.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', settings_module)
 
 application = get_wsgi_application()
-app = application

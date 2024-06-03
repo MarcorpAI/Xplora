@@ -50,7 +50,23 @@
                         <button class="new-fileBtn">
                             <i class='bx bx-file-find'></i>
                         </button>
-                        <div class="tooltip">ask Database</div>
+                        <div class="tooltip">chat file</div>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url "uploadfile_view" %}">
+                        <button class="new-fileBtn">
+                            <i class='bx bx-folder-plus'></i>
+                        </button>
+                        <div class="tooltip">new chat</div>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url "db_postgres" %}">
+                        <button class="new-fileBtn">
+                            <i class='bx bxl-postgresql'></i>
+                        </button>
+                        <div class="tooltip">ask postgres</div>
                     </a>
                 </li>
             </ul>
