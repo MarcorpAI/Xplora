@@ -18,10 +18,21 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
       - name: Create and start virtual environment
         run: |
           python -m venv venv
           source venv/bin/activate
+
+      - name: Debug Python version and pip
+        run: |
+          python --version
+          pip --version
+          pip list
       
       - name: Install dependencies
         run: pip install -r requirements.txt
