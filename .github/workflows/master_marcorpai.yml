@@ -37,8 +37,8 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Collect static files
-        run: python RagApp/manage.py collectstatic
+      # - name: Collect static files
+      #   run: python RagApp/manage.py collectstatic
         
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
