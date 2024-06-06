@@ -38,15 +38,15 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Collect static files
-        run: python manage.py collectstatic --noinput
+        run: python RagApp/manage.py collectstatic --noinput
 
       - name: List project directory contents
         run: ls -la
 
       - name: Check for essential files
         run: |
-          if [ ! -f manage.py ]; then echo "Error: manage.py not found!"; exit 1; fi
-          if [ ! -f .env ]; then echo "Warning: .env file not found!"; fi
+          if [ ! -f RagApp/manage.py ]; then echo "Error: RagApp/manage.py not found!"; exit 1; fi
+          if [ ! -f RagApp/.env ]; then echo "Warning: RagApp/.env file not found!"; fi
           echo "All necessary files are present."
         
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
