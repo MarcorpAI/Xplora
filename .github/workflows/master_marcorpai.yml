@@ -1,4 +1,4 @@
-name: Build and deploy Python app to Azure Web App - marcorpai
+name: Build and deploy Python app to Azure Web App - azuredjangotutorial
 
 on:
   push:
@@ -18,36 +18,26 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-
       - name: Create and start virtual environment
         run: |
-          python -m venv env
-          source env/bin/activate
-
+          python -m venv venv
+          source venv/bin/activate
+      
       - name: Install dependencies
-        run: |
-          source env/bin/activate
-          pip install -r RagApp/requirements.txt
+        run: pip install -r requirements.txt
 
-      - name: Collect static files
-        run: |
-          source env/bin/activate
-          python RagApp/manage.py collectstatic --noinput
+      - name: Run collectstatic
+        run: python manage.py collectstatic
         
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
-
-      - name: Zip artifact for deployment
-        run: zip -r release.zip ./* -x "env/*" ".git/*" "static_root/*"
-
+      
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v3
         with:
           name: python-app
-          path: release.zip
+          path: |
+            . 
+            !venv/
 
   deploy:
     runs-on: ubuntu-latest
@@ -55,25 +45,18 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    permissions:
-      id-token: write #This is required for requesting the JWT
 
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
           name: python-app
-
-      - name: Login to Azure
-        uses: azure/login@v1
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_45A7DFA6CFC54AA39C40CFB1763A6C70 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_FCE469D0F7D8497CA9A9A689E0CCF8B6 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_055AEA7994404A6BAB23DDD0C7E9444C }}
-
+          path: .
+          
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
         id: deploy-to-webapp
         with:
           app-name: 'marcorpai'
           slot-name: 'Production'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
