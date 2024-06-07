@@ -63,7 +63,7 @@ jobs:
     steps:
       - name: Activate virtual environment
         run: | 
-          source env/bin/activate
+          source /env/bin/activate
 
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
