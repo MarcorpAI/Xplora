@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Set up Python version
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
@@ -23,9 +23,13 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install dependencies
+      - name: Create and start virtual environment
         run: |
           python -m venv env
+          source env/bin/activate
+
+      - name: Install dependencies
+        run: |
           source env/bin/activate
           pip install -r RagApp/requirements.txt
 
@@ -33,13 +37,13 @@ jobs:
         run: |
           source env/bin/activate
           python RagApp/manage.py collectstatic --noinput
+        
+      # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
       - name: Zip artifact for deployment
-        run: |
-          zip -r release.zip ./* env/ -x "env/*" ".git/*" "static_root/*"
-          unzip -l release.zip  # List contents of release.zip
+        run: zip -r release.zip ./* env/ -x "env/*" ".git/*" "static_root/*"
 
-      - name: Upload artifact for deployment
+      - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v3
         with:
           name: python-app
@@ -59,13 +63,13 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: python-app
-      
+
       - name: Login to Azure
         uses: azure/login@v1
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_45A7DFA6CFC54AA39C40CFB1763A6C70 }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_FCE469D0F7D8497CA9A9A689E0CCF8B6 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_055AEA7994404A6BAB23DDD0C7E9 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_055AEA7994404A6BAB23DDD0C7E9444C }}
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
@@ -73,4 +77,3 @@ jobs:
         with:
           app-name: 'marcorpai'
           slot-name: 'Production'
-          package: release.zip
