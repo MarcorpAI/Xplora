@@ -28,6 +28,9 @@ jobs:
           python -m venv env
           source env/bin/activate
 
+      - name: Change working directory
+        run: cd pg_RAG
+
 
       - name: Install dependencies
         run: |
