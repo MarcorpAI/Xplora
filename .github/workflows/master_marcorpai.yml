@@ -61,15 +61,16 @@ jobs:
 
 
     steps:
-      - name: Activate virtual environment
-        run: | 
-          source /env/bin/activate
 
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
           name: python-app
-          path: /env
+          path: .
+      
+      - name: Activate virtual environment
+        run: | 
+          source env/bin/activate
 
       - name: Login to Azure
         uses: azure/login@v1
