@@ -1,4 +1,4 @@
-name: Build and deploy Python app to Azure Web App - azuredjangotutorial
+name: Build and deploy Python app to Azure Web App - marcorpai
 
 on:
   push:
@@ -59,4 +59,4 @@ jobs:
         with:
           app-name: 'marcorpai'
           slot-name: 'Production'
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_45A7DFA6CFC54AA39C40CFB1763A6C70 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
