@@ -24,10 +24,18 @@ jobs:
           source env/bin/activate
       
       - name: Install dependencies
-        run: pip install -r RagApp/requirements.txt
+        run: |
+          python -m venv env
+          source env/bin/activate
+          
+          pip install -r RagApp/requirements.txt
 
       - name: Run collectstatic
-        run: python RagApp/manage.py collectstatic --noinput
+        run: | 
+          python -m venv env
+          source env/bin/activate
+
+          python RagApp/manage.py collectstatic --noinput
         
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
       
@@ -51,7 +59,9 @@ jobs:
 
     steps:
       - name: Activate virtual environment
-        run: source env/bin/activate
+        run: |
+          python -m venv env 
+          source env/bin/activate
 
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
