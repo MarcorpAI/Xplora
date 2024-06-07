@@ -21,17 +21,19 @@ jobs:
       - name: Create and start virtual environment
         run: |
           python -m venv env
-          source /home/runner/env/bin/activate
+          source env/bin/activate
       
       - name: Install dependencies
         run: |
-          source /home/runner/env/bin/activate
+          python -m venv env
+          source env/bin/activate
           
           pip install -r RagApp/requirements.txt
 
       - name: Run collectstatic
         run: | 
-          source /home/runner/env/bin/activate
+          python -m venv env
+          source env/bin/activate
 
           python RagApp/manage.py collectstatic --noinput
         
@@ -41,9 +43,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: python-app
-          path: |
-           . 
-           !/home/runner/env/
+          path: ./env
 
   deploy:
     runs-on: ubuntu-latest
@@ -56,20 +56,15 @@ jobs:
 
 
     steps:
+      - name: Activate virtual environment
+        run: | 
+          source /home/runner/env/bin/activate
+
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
           name: python-app
-          path: /home/runner
-
-      - name: Activate virtual environment
-        run: |
-          source /home/runner/env/bin/activate
-
-      - name: Install dependencies again
-        run: |
-          source /home/runner/env/bin/activate
-          pip install -r RagApp/requirements.txt
+          path: /home/runner/env
 
       - name: Login to Azure
         uses: azure/login@v1
