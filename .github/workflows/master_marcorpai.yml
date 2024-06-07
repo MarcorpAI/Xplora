@@ -43,7 +43,10 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: python-app
-          path: ./env
+          path: |
+            RagApp/
+            RagApp/requirements.txt
+            env/lib/python3.11/site-packages/
 
   deploy:
     runs-on: ubuntu-latest
