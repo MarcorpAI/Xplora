@@ -38,15 +38,17 @@ jobs:
           python RagApp/manage.py collectstatic --noinput
         
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
+
+      - name: Create archive of files
+        run: |
+          tar -czf python-app.tar.gz RagApp/ RagApp/requirements.txt env/lib/python3.11/site-packages/
+
       
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v3
         with:
           name: python-app
-          path: |
-            RagApp/
-            RagApp/requirements.txt
-            env/lib/python3.11/site-packages/
+          path: python-app.tar.gz
 
   deploy:
     runs-on: ubuntu-latest
