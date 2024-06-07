@@ -32,7 +32,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 load_dotenv() 
 
-embeddings = OpenAIEmbeddings()
+embeddings = OpenAIEmbeddings(OPENAI_API_KEY)
 
 
 
@@ -97,7 +97,7 @@ def get_embeddings(docs, metadata_filter=None):
 
     vector_store = PineconeVectorStore.from_documents(
         docs,
-        embedding=OpenAIEmbeddings(),
+        embedding=OpenAIEmbeddings(OPENAI_API_KEY),
         index_name='app5',
     )
 
