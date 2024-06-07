@@ -1,4 +1,4 @@
- name: Build and deploy Python app to Azure Web App - marcorpai
+name: Build and deploy Python app to Azure Web App - marcorpai
 
 on:
   push:
