@@ -25,42 +25,30 @@ jobs:
 
       - name: Create and start virtual environment
         run: |
-          python -m venv venv
-          source venv/bin/activate
+          python -m venv env
+          source env/bin/activate
 
-      - name: Debug Python version and pip
-        run: |
-          python --version
-          pip --version
-          pip list
-      
+
       - name: Install dependencies
-        run: pip install -r RagApp/requirements.txt
+        run: |
+          source env/bin/activate
+          pip install -r RagApp/requirements.txt
 
       - name: Collect static files
-        run: python RagApp/manage.py collectstatic --noinput
-
-      - name: List project directory contents
-        run: ls -la
-
-      - name: Check for essential files
         run: |
-          if [ ! -f RagApp/manage.py ]; then echo "Error: RagApp/manage.py not found!"; exit 1; fi
-          if [ ! -f RagApp/.env ]; then echo "Warning: RagApp/.env file not found!"; fi
-          echo "All necessary files are present."
+          source env/bin/activate
+          python RagApp/manage.py collectstatic --noinput
         
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
       - name: Zip artifact for deployment
-        run: zip -r release.zip RagApp/* -x "venv/*" ".git/*" "static_root/*"
+        run: zip -r release.zip RagApp/* -x "env/*" ".git/*" "static_root/*"
 
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v3
         with:
           name: python-app
-          path: |
-            release.zip
-            !venv/
+          path: release.zip
 
   deploy:
     runs-on: ubuntu-latest
