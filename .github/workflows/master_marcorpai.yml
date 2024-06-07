@@ -18,7 +18,7 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: setup Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'
@@ -26,11 +26,6 @@ jobs:
       - name: Create and start virtual environment
         run: |
           python -m venv env
-          source env/bin/activate
-
-
-      - name: Install dependencies
-        run: |
           source env/bin/activate
           pip install -r RagApp/requirements.txt
 
@@ -57,7 +52,7 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write #This is required for requesting the JWT
+      id-token: write # This is required for requesting the JWT
 
     steps:
       - name: Download artifact from build job
@@ -75,7 +70,13 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_FCE469D0F7D8497CA9A9A689E0CCF8B6 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_055AEA7994404A6BAB23DDD0C7E9444C }}
 
-      - name: 'Deploy to Azure Web App'
+      - name: Set up Python environment in Azure
+        run: |
+          python -m venv env
+          source env/bin/activate
+          pip install -r RagApp/requirements.txt
+
+      - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         id: deploy-to-webapp
         with:
