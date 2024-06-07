@@ -59,4 +59,4 @@ jobs:
         with:
           app-name: 'marcorpai'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_45A7DFA6CFC54AA39C40CFB1763A6C70 }}
