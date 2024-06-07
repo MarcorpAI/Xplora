@@ -27,7 +27,7 @@ jobs:
         run: pip install -r RagApp/requirements.txt
 
       - name: Run collectstatic
-        run: python RagApp/manage.py collectstatic
+        run: python RagApp/manage.py collectstatic --noinput
         
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
       
