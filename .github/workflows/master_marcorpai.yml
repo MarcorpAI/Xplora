@@ -35,7 +35,7 @@ jobs:
           pip list
       
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: pip install -r RagApp/requirements.txt
 
       - name: Collect static files
         run: python RagApp/manage.py collectstatic --noinput
