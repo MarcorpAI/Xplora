@@ -55,7 +55,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: python-app
-          path: /env
+          path: .
 
       - name: Set up Python version
         uses: actions/setup-python@v4
