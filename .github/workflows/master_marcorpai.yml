@@ -20,8 +20,8 @@ jobs:
 
       - name: Create and start virtual environment
         run: |
-          python -m venv venv
-          source venv/bin/activate
+          python -m venv env
+          source env/bin/activate
       
       - name: Install dependencies
         run: pip install -r RagApp/requirements.txt
@@ -37,7 +37,7 @@ jobs:
           name: python-app
           path: |
             . 
-            !venv/
+            !env/
 
   deploy:
     runs-on: ubuntu-latest
