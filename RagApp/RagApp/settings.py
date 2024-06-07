@@ -33,7 +33,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'HS',
     'langchain',
-    'chromadb',
     'celery',
     'rest_framework',
     'allauth',
