@@ -147,8 +147,8 @@ pyreadline3==3.4.1
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
 python-iso639==2024.2.7
-# python-magic==0.4.27
-# python-magic-bin==0.4.14
+python-magic==0.4.27
+python-magic-bin==0.4.14
 python-slugify==8.0.4
 pytz==2024.1
 PyYAML==6.0.1
