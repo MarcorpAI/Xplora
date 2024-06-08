@@ -34,7 +34,8 @@ jobs:
 
       - name: Create archive of files
         run: |
-          tar -czf python-app.tar.gz RagApp/ RagApp/requirements.txt env/
+          tar --exclude='env/bin' --exclude='env/share' -czf python-app.tar.gz RagApp/ RagApp/requirements.txt env/
+
 
       
       - name: Upload artifact for deployment jobs
@@ -64,11 +65,13 @@ jobs:
       - name: Extract artifact
         run: |
           tar -xzf python-app.tar.gz
-          
+
 
       - name: Activate virtual environment
         run: |
+          python -m venv env
           source env/bin/activate
+          pip install -r RagApp/requirements.txt
 
 
       - name: Login to Azure
