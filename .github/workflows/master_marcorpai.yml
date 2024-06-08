@@ -13,10 +13,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Clean up disk space
+        run: sudo apt-get clean
+
       - name: Set up Python version
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
+
+      
+      - name: Cache Python packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/pip
+            env
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/RagApp/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
 
       - name: Create and start virtual environment and install packages
         run: |
@@ -56,15 +70,37 @@ jobs:
 
     steps:
 
+      - name: Clean up disk space before deploy
+        run: sudo apt-get clean
+
+
+
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
           name: python-app
           path: .
 
+
       - name: Extract artifact
         run: |
           tar -xzf python-app.tar.gz
+
+      
+      - name: Set up Python version
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Cache Python packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/pip
+            env
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/RagApp/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
 
 
       - name: Activate virtual environment
