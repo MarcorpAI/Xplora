@@ -78,7 +78,6 @@ jobs:
           sudo rm -rf /usr/share/dotnet /usr/share/swift /usr/local/lib/android /opt/ghc
 
 
-
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
