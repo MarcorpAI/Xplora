@@ -1,3 +1,4 @@
 [config]
 
 WEBSITE_WEBDEPLOY_USE_SCM = true
+python_requirements_file = RagApp/requirements.txt
