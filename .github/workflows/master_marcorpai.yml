@@ -71,7 +71,6 @@ jobs:
 
 
     steps:
-
       - name: Clean up disk space before deploy
         run: |
           sudo apt-get clean
@@ -118,10 +117,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-venv-
 
-      name: Activate virtual environment 
-      run: | 
-        source env/bin/activate
-        pip install -r RagApp/requirements.txt
+
+      - name: Activate virtual environment 
+        run: | 
+          source env/bin/activate
+          pip install -r RagApp/requirements.txt
 
 
       - name: Login to Azure
