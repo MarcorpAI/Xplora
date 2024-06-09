@@ -144,4 +144,4 @@ jobs:
       - name: Run cleanup script
         run: |
           chmod +x RagApp/cleanup.sh
-          ./cleanup.sh
+          RagApp/cleanup.sh
