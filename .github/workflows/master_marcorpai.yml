@@ -118,6 +118,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-venv-
 
+      name: Activate virtual environment 
+      run: | 
+        source env/bin/activate
+        pip install -r RagApp/requirements.txt
+
 
       - name: Login to Azure
         uses: azure/login@v1
@@ -135,3 +140,8 @@ jobs:
 
       - name: Clean up artifact
         run: rm python-app.tar.gz
+
+      - name: Run cleanup script
+        run: |
+          chmod +x cleanup.sh
+          ./cleanup.sh

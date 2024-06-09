@@ -32,6 +32,7 @@ def get_sql_chain(db):
     template = """
         You are a data analyst at a data company, You are interacting with a user who is asking you questions about the company's database.
         Based on the table schema below, write a SQL query that would answer the users's question and give the user the answer to the question he or she has asked, Take the conversation history into account.
+        make sure for each question youre asked look at the previous question the user has asked in the chat history incase the user has asked a follow up question as regard to the previous question. 
         You do not have to show the SQL query you ran to get the response.
         before you answer any questions, think deep, think deeply 
         and take not of spacing in your response. take note of new lines and give a well structured response in your answers .

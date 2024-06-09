@@ -30,9 +30,11 @@ from langchain.output_parsers.structured import StructuredOutputParser, Response
 logging.basicConfig(level=logging.DEBUG)
 
 
-load_dotenv() 
+load_dotenv()
 
-embeddings = OpenAIEmbeddings(api_key=OPENAI_API_KEY)
+
+
+# embeddings = OpenAIEmbeddings(OPENAI_API_KEY)
 
 
 
@@ -97,7 +99,7 @@ def get_embeddings(docs, metadata_filter=None):
 
     vector_store = PineconeVectorStore.from_documents(
         docs,
-        embedding=OpenAIEmbeddings(api_key=OPENAI_API_KEY),
+        embedding=OpenAIEmbeddings(),
         index_name='app5',
     )
 
