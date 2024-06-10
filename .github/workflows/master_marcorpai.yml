@@ -41,7 +41,7 @@ jobs:
 
       - name: Create archive of files
         run: |
-          tar -czf python-app.tar.gz RagApp/ requirements.txt env/lib/python3.11/site-packages/
+          tar --exclude='*.pyc' --exclude='__pycache__' --exclude='.git' -czf python-app.tar.gz RagApp/ requirements.txt
 
 
       
