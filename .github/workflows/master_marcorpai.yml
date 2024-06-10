@@ -13,52 +13,41 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Clean up disk space
-        run: |
-          sudo apt-get clean
-          sudo rm -rf /usr/share/dotnet /usr/share/swift /usr/local/lib/android /opt/ghc
-
       - name: Set up Python version
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
 
-      
-      - name: Cache Python packages and virtual environment
-        uses: actions/cache@v3
+      - name: setup Node.js
+        uses: actions/setup-node@v3
         with:
-          path: |
-            ~/.cache/pip
-            env
-          key: ${{ runner.os }}-pip-venv-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-venv-
+          node-version: '20'
 
-      - name: Create and start virtual environment and install packages
+      - name: Create and start virtual environment
         run: |
           python -m venv env
           source env/bin/activate
-          pip install -r requirements.txt
-      
 
-      - name: Run collectstatic
-        run: | 
+      - name: Install dependencies
+        run: |
+          source env/bin/activate
+          pip install -r requirements.txt
+
+      - name: Collect static files
+        run: |
           source env/bin/activate
           python RagApp/manage.py collectstatic --noinput
         
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
-      - name: Create archive of files
-        run: |
-          tar --exclude='*.pyc' --exclude='__pycache__' --exclude='.git' -czf python-app.tar.gz RagApp/ requirements.txt
+      - name: Zip artifact for deployment
+        run: zip -r release.zip ./* env/ -x "env/*" ".git/*" "static_root/*"
 
-
-      
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v3
         with:
           name: python-app
-          path: python-app.tar.gz
+          path: release.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -69,59 +58,17 @@ jobs:
     permissions:
       id-token: write #This is required for requesting the JWT
 
-
     steps:
-      - name: Clean up disk space before deploy
-        run: |
-          sudo apt-get clean
-          sudo rm -rf /usr/share/dotnet /usr/share/swift /usr/local/lib/android /opt/ghc
-
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
           name: python-app
-          path: .
 
-
-      - name: Extract artifact
+      - name: Unzip artifact for deployment
         run: |
-          tar -xzf python-app.tar.gz
-
-      
-      - name: Clean up old deployments
-        run: |
-          if [ -d "/home/site/wwwroot/old-directory" ]; then
-            rm -rf /home/site/wwwroot/old-directory
-          fi
-          if [ -d "/home/LogFiles/old-logs" ]; then
-            rm -rf /home/LogFiles/old-logs
-          fi
-          if [ -d "/home/data/temp" ]; then
-            rm -rf /home/data/temp/*
-          fi
-
-      
-      - name: Set up Python version
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-
-      - name: Cache Python packages and virtual environment
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cache/pip
-            env
-          key: ${{ runner.os }}-pip-venv-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-venv-
-
-
-      - name: Activate virtual environment 
-        run: | 
-          source env/bin/activate
-          pip install -r requirements.txt
-
+          unzip release.zip
+          unzip -l release.zip
+          
 
       - name: Login to Azure
         uses: azure/login@v1
@@ -144,3 +91,4 @@ jobs:
         run: |
           chmod +x RagApp/cleanup.sh
           RagApp/cleanup.sh
+
