@@ -23,16 +23,7 @@ jobs:
         with:
           python-version: '3.11'
 
-      
-      - name: Cache Python packages and virtual environment
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cache/pip
-            env
-          key: ${{ runner.os }}-pip-venv-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-venv-
+    
 
       - name: Create and start virtual environment and install packages
         run: |
@@ -50,7 +41,7 @@ jobs:
 
       - name: Create archive of files
         run: |
-          tar --exclude='*.pyc' --exclude='__pycache__' --exclude='.git' -czf python-app.tar.gz RagApp/ requirements.txt
+          tar -czf python-app.tar.gz RagApp/ requirements.txt env/lib/python3.11/site-packages/
 
 
       
@@ -105,17 +96,6 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-
-      - name: Cache Python packages and virtual environment
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cache/pip
-            env
-          key: ${{ runner.os }}-pip-venv-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-venv-
-
 
       - name: Activate virtual environment 
         run: | 
