@@ -30,7 +30,7 @@ jobs:
           path: |
             ~/.cache/pip
             env
-          key: ${{ runner.os }}-pip-venv-${{ hashFiles('**/RagApp/requirements.txt') }}
+          key: ${{ runner.os }}-pip-venv-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-venv-
 
@@ -50,7 +50,7 @@ jobs:
 
       - name: Create archive of files
         run: |
-          tar --exclude='*.pyc' --exclude='__pycache__' --exclude='.git' -czf python-app.tar.gz RagApp/ RagApp/requirements.txt
+          tar --exclude='*.pyc' --exclude='__pycache__' --exclude='.git' -czf python-app.tar.gz RagApp/ requirements.txt
 
 
       
@@ -113,7 +113,7 @@ jobs:
           path: |
             ~/.cache/pip
             env
-          key: ${{ runner.os }}-pip-venv-${{ hashFiles('**/RagApp/requirements.txt') }}
+          key: ${{ runner.os }}-pip-venv-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-venv-
 
