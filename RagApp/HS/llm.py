@@ -33,12 +33,10 @@ logging.basicConfig(level=logging.DEBUG)
 load_dotenv()
 
 # Initialize OpenAI embeddings
-embeddings = OpenAIEmbeddings(model="text-embedding-ada-002")  # Adjust model as needed
+openai_api_key = os.getenv('OPENAI_API_KEY')
+pinecone_api_key = os.getenv('PINECONE_API_KEY')
 
-
-
-
-
+grog_api_key = os.getenv('GROG_API_KEY')
 
 
 
@@ -74,7 +72,7 @@ def get_embeddings(docs, metadata_filter=None):
         PineconeVectorStore: A vector store containing the embeddings of the documents.
     """
     Pinecone(
-        api_key=os.environ.get('pinecone'),
+        api_key=pinecone_api_key,
     )
 
     if metadata_filter is not None:
@@ -85,7 +83,7 @@ def get_embeddings(docs, metadata_filter=None):
 
     vector_store = PineconeVectorStore.from_documents(
         docs,
-        embedding=OpenAIEmbeddings(),
+        embedding=OpenAIEmbeddings(api_key=openai_api_key),
         index_name='app5',
     )
 
@@ -109,7 +107,7 @@ def get_openai_llm():
         llm (ChatOpenAI): An instance of the OpenAI language model for the LLM interface.
     """
     # llm = ChatOpenAI(temperature=0)
-    llm = ChatGroq(model="Llama3-70b-8192", temperature=0, groq_api_key="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")
+    llm = ChatGroq(model="Llama3-70b-8192", temperature=0, groq_api_key=grog_api_key)
 
 
     return llm
