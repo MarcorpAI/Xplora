@@ -87,11 +87,3 @@ jobs:
           app-name: 'marcorpai'
           slot-name: 'Production'
 
-      - name: Clean up artifact
-        run: rm python-app.tar.gz
-
-      - name: Run cleanup script
-        run: |
-          chmod +x RagApp/cleanup.sh
-          RagApp/cleanup.sh
-
