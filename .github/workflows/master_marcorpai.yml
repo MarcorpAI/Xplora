@@ -67,6 +67,10 @@ jobs:
         with:
           name: python-app
           path: .
+      
+      - name: Extract artifact
+        run: |
+          tar -xzf python-app.tar.gz
           
 
       - name: Login to Azure
