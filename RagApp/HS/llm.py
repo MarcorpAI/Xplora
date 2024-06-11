@@ -32,20 +32,6 @@ logging.basicConfig(level=logging.DEBUG)
 
 load_dotenv()
 
-
-
-# embeddings = OpenAIEmbeddings(OPENAI_API_KEY)
-
-
-
- #Initialize Pinecone
-PINECONE_API_KEY = os.getenv('PINECONE_API_KEY')
-PINECONE_ENVIRONMENT = os.getenv('PINECONE_ENVIRONMENT')
-PINECONE_INDEX_NAME = 'app5'
-
-pc = Pinecone(api_key=PINECONE_API_KEY)
-index = pc.Index("app5")
-
 # Initialize OpenAI embeddings
 embeddings = OpenAIEmbeddings(model="text-embedding-ada-002")  # Adjust model as needed
 
