@@ -37,19 +37,16 @@ jobs:
           python RagApp/manage.py collectstatic --noinput
 
           
-
-      - name: Create archive of files
-        run: |
-          tar --exclude='*.pyc' --exclude='__pycache__' --exclude='.git' -czf python-app.tar.gz RagApp/ requirements.txt
-
-
+ 
 
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v2
         with:
           name: python-app
-          path: python-app.tar.gz
+          path: |
+            .
+            !env/
 
 
   deploy:
@@ -68,9 +65,7 @@ jobs:
           name: python-app
           path: .
       
-      - name: Extract artifact
-        run: |
-          tar -xzf python-app.tar.gz
+
           
 
       - name: Login to Azure
