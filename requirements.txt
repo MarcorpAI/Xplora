@@ -87,6 +87,7 @@ langchain-text-splitters==0.0.1
 langchainhub==0.1.15
 langdetect==1.0.9
 langsmith==0.1.38
+libmagic==1.0
 lxml==5.2.1
 markdown-it-py==3.0.0
 MarkupSafe==2.1.5
