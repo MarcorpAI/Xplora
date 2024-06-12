@@ -25,13 +25,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "whitenoise.runserver_nostatic",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'HS',
+    'HS.apps.HsConfig',
     'langchain',
     'celery',
     'rest_framework',
@@ -154,7 +155,7 @@ FILE_UPLOAD_HANDLERS = [
 FILE_UPLOAD_PERMISSIONS = 0o644
 
 
-
+STATICFILES_STORAGE = ('whitenoise.storage.CompressedManifestStaticFilesStorage')
 
 
 LOGIN_REDIRECT_URL = '/chatwfile/'
@@ -163,6 +164,7 @@ LOGIN_REDIRECT_URL = '/chatwfile/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
