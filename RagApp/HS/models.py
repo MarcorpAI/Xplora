@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from allauth.account.signals import user_logged_in, user_signed_up
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
-import magic
+import mimetypes
 
 file_validator = FileExtensionValidator(['docx', 'pdf', 'xlsx', 'txt', 'csv'])
 
@@ -29,8 +29,8 @@ def validate_file_mimetype(file):
     accept = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     'text/plain', 'application/msword', 'application/vnd.ms-excel', 'text/csv']
 
-    file_mime_type = magic.from_buffer(file.read(2024), mime=True)
-    if file_mime_type not in accept:
+    mime_type, _ = mimetypes.guess_type(file.name)
+    if mime_type not in accept:
         raise ValidationError("Unsupported file type")
 
 class DocumentUpload(models.Model):
