@@ -88,7 +88,6 @@ langchain-text-splitters==0.0.1
 langchainhub==0.1.15
 langdetect==1.0.9
 langsmith==0.1.38
-libmagic==1.0
 lxml==5.2.1
 markdown-it-py==3.0.0
 MarkupSafe==2.1.5
@@ -149,8 +148,6 @@ pyreadline3==3.4.1
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
 python-iso639==2024.2.7
-# python-magic==0.4.27
-# python-magic-bin==0.4.14
 python-slugify==8.0.4
 pytz==2024.1
 PyYAML==6.0.1
