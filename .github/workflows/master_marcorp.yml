@@ -17,9 +17,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Clean up before build
-        run: sudo rm -rf /tmp/*
-
       - name: Set up Python version
         uses: actions/setup-python@v1
         with:
@@ -48,9 +45,7 @@ jobs:
           path: |
             release.zip
             !venv/
-      
-      - name: Clean up after build
-        run: sudo rm -rf /tmp/*
+    
 
   deploy:
     runs-on: ubuntu-latest
