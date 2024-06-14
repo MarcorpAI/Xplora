@@ -1,8 +1,0 @@
-UPDATES:
-
-- added a line and commented out a line in the llm.py file, line below
-from langchain.chains.combine_documents.stuff import StuffDocumentsChain
-
-- also edit the index.html file and added it to path in HS urls.py and also in HS views.py
-
-- did some changes on the html pages in templates folder, also add some styling effects in the js file of scriptdocx.js
