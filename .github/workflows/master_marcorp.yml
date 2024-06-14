@@ -20,6 +20,9 @@ jobs:
       - name: Check disk usage before setup
         run: df -h
 
+      - name: Clean up before build
+        run: sudo rm -rf /tmp/*
+
       - name: Set up Python version
         uses: actions/setup-python@v1
         with:
@@ -35,6 +38,9 @@ jobs:
 
       - name: Run collectstatic
         run: python RagApp/manage.py collectstatic --noinput
+
+      - name: Clean up after build
+        run: sudo rm -rf /tmp/*
         
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
@@ -68,6 +74,9 @@ jobs:
 
       - name: Unzip artifact for deployment
         run: unzip release.zip
+
+      - name: Clean up after unzip
+        run: sudo rm -rf /tmp/*
 
       
       - name: Login to Azure
