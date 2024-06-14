@@ -17,6 +17,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check disk usage before setup
+        run: df -h
+
       - name: Set up Python version
         uses: actions/setup-python@v1
         with:
@@ -46,7 +49,7 @@ jobs:
             release.zip
             !venv/
     
-            
+
 
   deploy:
     runs-on: ubuntu-latest
@@ -80,4 +83,7 @@ jobs:
         with:
           app-name: 'marcorp'
           slot-name: 'Production'
+        
+      - name: Check disk usage after deployment
+        run: df -h
           
