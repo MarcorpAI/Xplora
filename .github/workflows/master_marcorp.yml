@@ -43,7 +43,7 @@ jobs:
         run: sudo rm -rf /tmp/*
         
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
-      
+
 
       - name: Zip artifact for deployment
         run: zip release.zip ./* -x venv/\* -x@.gitignore -r
@@ -68,6 +68,9 @@ jobs:
       id-token: write #This is required for requesting the JWT
 
     steps:
+      - name: Check disk usage after deployment
+        run: df -h
+
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
