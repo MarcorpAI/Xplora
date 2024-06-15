@@ -16,6 +16,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      
 
       - name: Check disk usage before setup
         run: df -h
@@ -34,7 +35,7 @@ jobs:
           source venv/bin/activate
       
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: pip install -r requirements.txt --no-cache-dir
 
       - name: Run collectstatic
         run: python RagApp/manage.py collectstatic --noinput
@@ -46,7 +47,7 @@ jobs:
 
 
       - name: Zip artifact for deployment
-        run: zip release.zip ./* -x venv/\* -x@.gitignore -r
+        run: zip release.zip RagApp/* -x "venv/*" ".git/*" "static_root/*"
 
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v3
