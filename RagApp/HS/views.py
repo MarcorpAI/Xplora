@@ -165,7 +165,6 @@ class QueryFile(APIView):
 
 
 
- 
 
 
 class DatabaseConnectionView(LoginRequiredMixin,APIView):
