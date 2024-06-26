@@ -56,6 +56,14 @@ jobs:
           path: |
             release.zip
             !venv/
+
+      - name: List contents of deployment package
+        run: |
+          echo "Current directory:"
+          pwd
+          echo "Directory contents:"
+          ls -R
+          
     
 
   deploy:
