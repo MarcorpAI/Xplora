@@ -47,7 +47,7 @@ jobs:
 
 
       - name: Zip artifact for deployment
-        run: zip release.zip RagApp/* -x "venv/*" ".git/*" "static_root/*" -i RagApp/requirements.txt
+        run: zip release.zip ./* -x "env/*" ".git/*" "static_root/*"
 
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v3
