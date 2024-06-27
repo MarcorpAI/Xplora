@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set the Python path to include your project root
-export PYTHONPATH=$PYTHONPATH:/home/site/wwwroot/PG_RAG
+export PYTHONPATH=$PYTHONPATH:/home/site/wwwroot/PG_RAG:/home/site/wwwroot/PG_RAG/RagApp
 
 
 # Run migrations (optional, but often useful)
