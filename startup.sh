@@ -5,7 +5,7 @@ export PYTHONPATH=$PYTHONPATH:/home/site/wwwroot/pg_RAG:/home/site/wwwroot/pg_RA
 
 
 # Run migrations (optional, but often useful)
-cd /home/site/wwwroot/pg_RAG/RagApp
+cd /home/site/wwwroot/pg_RAG/RagApp/RagApp
 
 
 # Start Gunicorn server
