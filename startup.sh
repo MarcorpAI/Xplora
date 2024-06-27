@@ -7,4 +7,4 @@ cd $(dirname "$0")
 python manage.py migrate
 
 # Start Gunicorn server
-exec gunicorn --workers 3 --bind=0.0.0.0:8000 RagApp.wsgi:application
+exec gunicorn --workers 3 --bind=0.0.0.0:8000 RagApp.RagApp.wsgi:application
