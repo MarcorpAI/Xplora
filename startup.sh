@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # Set the Python path to include your project root
-export PYTHONPATH=$PYTHONPATH:/home/site/wwwroot/PG_RAG:/home/site/wwwroot/PG_RAG/RagApp
+export PYTHONPATH=$PYTHONPATH:/home/site/wwwroot/pg_RAG:/home/site/wwwroot/pg_RAG/RagApp
 
 
 # Run migrations (optional, but often useful)
-cd /home/site/wwwroot/PG_RAG/RagApp
+cd /home/site/wwwroot/pg_RAG/RagApp
 
 
 # Start Gunicorn server
