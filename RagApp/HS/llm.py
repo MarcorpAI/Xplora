@@ -153,6 +153,7 @@ def get_response_llm(llm, vector_store, question, file_id, chat_history:list, me
     Please make sure to through the files properly to retrieve information from the file based on the users query
     for analysis tasks in csv and xlsx files you are going to make sure to analyze data properly, make sure not to show too much working in your response to avoid ambiguous response.
     Also make sure to keep the chat history in mind while reponding to the questions.
+    It is also very important that you respond in markdown format. 
     
     Conversation History: {chat_history}
     Question: {question}

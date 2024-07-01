@@ -28,6 +28,13 @@ class Commaseperatedoutput(BaseOutputParser):
         return text.strip().split(",")
 
 
+
+
+def init_database(user:str, password:str, host:str, port:str, database:str) -> SQLDatabase:
+    db_uri = f"mysql+mysqlconnector://{user}:{password}@{host}:{port}/{database}"
+    return SQLDatabase.from_uri(db_uri)
+
+
 def get_sql_chain(db):
     template = """
         You are a data analyst at a data company, You are interacting with a user who is asking you questions about the company's database.
@@ -36,7 +43,15 @@ def get_sql_chain(db):
         You do not have to show the SQL query you ran to get the response.
         before you answer any questions, think deep, think deeply 
         and take not of spacing in your response. take note of new lines and give a well structured response in your answers .
-        do not give jampackked answers
+        do not give jampackked answers.
+        Also note that it is important that you respond in markdown format when necessary, and ignore the hash symbols.
+        Include headings with bold text when dealing with responses the requires that.
+        when listing out items make sure you list each item in seperate lines to achieve a well structured answer.
+        make sure you display a well structured answer for the user or the viewer to be able to understand what he or she is reading.
+        Respond in Rich Text format
+
+
+
 
 
         <SCHEMA>{schema}<SCHEMA>
@@ -60,7 +75,7 @@ def get_sql_chain(db):
         """
     prompt = ChatPromptTemplate.from_template(template)
     # llm = ChatOpenAI(temperature=0)
-    llm = ChatGroq(model="Llama3-70b-8192", temperature=0,  groq_api_key="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")
+    llm = ChatGroq(model="Llama3-70b-8192", temperature=0,  groq_api_key="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")
 
 
     def get_schema(_):
@@ -81,7 +96,13 @@ def get_response(user_question:str, db:SQLDatabase, chat_history:list):
        You are a data analyst at a company, you are interacting with a user who is asking you questions about the company's database.
        when you are asked a question give a definite answer and do not hallucinate reponses. and also repond with the answer you get from the SQL query you run
        Based on the table schema below, question, sql query and sql response, write a natural language reponse.
-       You do not have to show the SQL query you ran to get the response
+       You do not have to show the SQL query you ran to get the response 
+       Avoid using markdown or HTML formatting in your response.
+       Include headings with bold text when dealing with responses the requires that.
+       when listing out items make sure you list each item in seperate lines to achieve a well structured answer.
+       make sure you display a well structured answer for the user or the viewer to be able to understand what he or she is reading.
+       Respond in Rich Text format
+
 
        Conversation history: {chat_history}
        SQL Query: <SQL>{query}</SQL>
@@ -90,7 +111,7 @@ def get_response(user_question:str, db:SQLDatabase, chat_history:list):
     
     prompt = ChatPromptTemplate.from_template(template)
     # llm = ChatOpenAI(temperature=0)
-    llm = ChatGroq(model="llama3-70b-8192", temperature=0, groq_api_key="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")
+    llm = ChatGroq(model="llama3-70b-8192", temperature=0, groq_api_key="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")
 
     chain = (
         RunnablePassthrough.assign(query=sql_chain).assign(
@@ -113,9 +134,7 @@ def get_response(user_question:str, db:SQLDatabase, chat_history:list):
 
 
 
-def init_database(user:str, password:str, host:str, port:str, database:str) -> SQLDatabase:
-    db_uri = f"mysql+mysqlconnector://{user}:{password}@{host}:{port}/{database}"
-    return SQLDatabase.from_uri(db_uri)
+
 
 
 
