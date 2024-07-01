@@ -107,6 +107,7 @@ jobs:
         with:
           app-name: 'marcorp'
           slot-name: 'Production'
+          package: .
         
       - name: Check disk usage after deployment
         run: df -h
