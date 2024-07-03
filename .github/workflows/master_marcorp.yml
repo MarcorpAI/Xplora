@@ -43,7 +43,7 @@ jobs:
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
       - name: Make startup script executable
-        run: chmod +x startup.sh
+        run: chmod +x RagApp/startup.sh
 
 
       - name: Zip artifact for deployment
