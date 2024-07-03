@@ -39,9 +39,6 @@ jobs:
 
       - name: Run collectstatic
         run: python RagApp/manage.py collectstatic --noinput
-
-      - name: Clean up after build
-        run: sudo rm -rf /tmp/*
         
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
@@ -50,7 +47,7 @@ jobs:
 
 
       - name: Zip artifact for deployment
-        run: zip release.zip ./* -x "env/*" ".git/*" "static_root/*"
+        run: zip release.zip RagApp/ -x "env/*" ".git/*" "static_root/*"
 
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v3
@@ -89,9 +86,6 @@ jobs:
 
       - name: Unzip artifact for deployment
         run: unzip release.zip
-
-      - name: Clean up after unzip
-        run: sudo rm -rf /tmp/*
 
       
       - name: Login to Azure
