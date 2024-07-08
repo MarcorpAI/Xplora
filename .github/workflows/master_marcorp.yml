@@ -42,7 +42,7 @@ jobs:
       - name: Install dependencies
         run: | 
           pip install -r requirements.txt --no-cache-dir
-          cd theme/static_src/package.json
+          cd RagApp/theme/static_src/package.json
           npm install
 
       - name: Build Tailwind CSS
