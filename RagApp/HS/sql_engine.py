@@ -20,8 +20,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-embeddings = OpenAIEmbeddings()
-
 
 class Commaseperatedoutput(BaseOutputParser):
     def parse(self, text:str):
