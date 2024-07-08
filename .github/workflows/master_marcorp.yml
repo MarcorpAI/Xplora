@@ -44,6 +44,7 @@ jobs:
           pip install -r requirements.txt --no-cache-dir
           cd RagApp/theme/static_src
           npm install
+          cd ..
 
       - name: Build Tailwind CSS
         run: |
