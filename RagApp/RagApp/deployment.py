@@ -9,7 +9,7 @@ ALLOWED_HOSTS = [os.environ["WEBSITE_HOSTNAME"]]
 
 CSRF_TRUSTED_ORIGINS = ["https://"+os.environ["WEBSITE_HOSTNAME"]]
 
-DEBUG = True
+DEBUG = False
 
 
 MIDDLEWARE = [
