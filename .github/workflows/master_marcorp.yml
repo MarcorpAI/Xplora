@@ -29,13 +29,26 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
       - name: Create and start virtual environment
         run: |
           python -m venv venv
           source venv/bin/activate
       
       - name: Install dependencies
-        run: pip install -r requirements.txt --no-cache-dir
+        run: | 
+          pip install -r requirements.txt --no-cache-dir
+          npm install
+
+      - name: Build Tailwind CSS
+        run: |
+          python manage.py tailwind install
+          python manage.py tailwind build
+
 
       - name: Run collectstatic
         run: python RagApp/manage.py collectstatic --noinput
