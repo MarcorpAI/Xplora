@@ -14,7 +14,6 @@ urlpatterns = [
     path('chatwfile/', UploadView.as_view(), name="uploadfile_view"),
     
     # # Urls for Excel files and querying
- 
 
     path('askdatabase/', DatabaseConnectionView.as_view(), name='db_connect'),
     path('query/', QueryDatabaseView.as_view(), name='db_query'),
