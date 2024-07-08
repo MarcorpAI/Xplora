@@ -155,7 +155,6 @@ FILE_UPLOAD_HANDLERS = [
 FILE_UPLOAD_PERMISSIONS = 0o644
 
 
-STATICFILES_STORAGE = ('whitenoise.storage.CompressedManifestStaticFilesStorage')
 
 
 LOGIN_REDIRECT_URL = '/chatwfile/'
@@ -212,7 +211,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = '/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -220,8 +218,11 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static_in_env')]
-VENV_PATH = os.path.dirname(BASE_DIR)
-STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
+STATIC_URL = '/static/'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), os.path.join(BASE_DIR, "RagApp/static")]
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 # MEDIA_URL = '/media/'
 # MEDIA_ROOT = os.path.join(VENV_PATH, 'media_root')
