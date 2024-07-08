@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const fileUploadSpinner = document.getElementById("file-upload-spinner");
       fileUploadSpinner.style.display = "flex";
   
-      fetch("http://127.0.0.1:8000/chatwfile/", {
+      fetch("https://marcorp.azurewebsites.net/chatwfile/", {
         method: "POST",
         body: formData,
         headers: {
@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const llmTypingSpinner = document.getElementById("llm-typing-spinner");
       llmTypingSpinner.style.display = "flex";
 
-      fetch("http://127.0.0.1:8000/queryfile_view/", {
+      fetch("https://marcorp.azurewebsites.net/queryfile_view/", {
         method: "POST",
         body: formData,
         headers: {
