@@ -34,6 +34,14 @@ jobs:
         with:
           node-version: '16'
 
+      - name: Check Node.js and npm installation
+        run: |
+          node --version
+          npm --version
+          echo "Node.js path: $(which node)"
+          echo "npm path: $(which npm)"
+
+
       - name: Create and start virtual environment
         run: |
           python -m venv venv
@@ -45,6 +53,12 @@ jobs:
           cd RagApp/theme/static_src
           npm install
           cd ..
+
+      - name: Update Django settings with NPM path
+        run: |
+          sed -i 's|NPM_BIN_PATH = "C:/Program Files/nodejs/npm.cmd"|NPM_BIN_PATH = "'$(which npm)'"|' RagApp/RagApp/settings.py
+
+          
 
       - name: Build Tailwind CSS
         run: |

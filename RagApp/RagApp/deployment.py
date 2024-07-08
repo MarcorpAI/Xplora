@@ -31,6 +31,16 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 connection_string = os.environ["AZURE_POSTGRESQL_CONNECTIONSTRINGS"]
 parameters = {pair.split('=')[0]: pair.split('=')[1] for pair in connection_string.split(' ')}
 
+
+
+TAILWIND_APP_NAME = 'theme'
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
+NPM_BIN_PATH = "C:/Program Files/nodejs/npm.cmd"
+
 DATABASES = {
     'default':{
         'ENGINE': 'django.db.backends.postgresql',
