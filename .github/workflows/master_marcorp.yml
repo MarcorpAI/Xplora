@@ -47,8 +47,8 @@ jobs:
 
       - name: Build Tailwind CSS
         run: |
-          python manage.py tailwind install
-          python manage.py tailwind build
+          python RagApp/manage.py tailwind install
+          python RagApp/manage.py tailwind build
 
 
       - name: Run collectstatic
