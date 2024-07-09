@@ -19,6 +19,7 @@ from langchain.chains.combine_documents.stuff import StuffDocumentsChain # added
 from langchain_core.load.serializable import Serializable
 import os
 import pinecone
+from langchain_cohere import CohereEmbeddings
 from langchain_community.document_loaders.csv_loader import CSVLoader, UnstructuredCSVLoader
 from langchain_experimental.agents.agent_toolkits import create_csv_agent
 import logging
@@ -37,6 +38,7 @@ openai_api_key = os.getenv('OPENAI_API_KEY')
 pinecone_api_key = os.getenv('PINECONE_API_KEY')
 
 grog_api_key = os.getenv('GROG_API_KEY')
+cohere_api_key = os.getenv('COHERE_API_KEY')
 
 
 
@@ -83,8 +85,8 @@ def get_embeddings(docs, metadata_filter=None):
 
     vector_store = PineconeVectorStore.from_documents(
         docs,
-        embedding=OpenAIEmbeddings(api_key=openai_api_key),
-        index_name='app5',
+        embedding=CohereEmbeddings(cohere_api_key=cohere_api_key),
+        index_name='marcorpai',
     )
 
     return vector_store

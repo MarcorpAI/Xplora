@@ -19,7 +19,7 @@ from sqlalchemy.pool import QueuePool
 from dotenv import load_dotenv
 load_dotenv()
 
-
+grog_api_key = os.getenv('GROG_API_KEY')
 
 class Commaseperatedoutput(BaseOutputParser):
     def parse(self, text:str):
@@ -73,7 +73,7 @@ def get_sql_chain(db):
         """
     prompt = ChatPromptTemplate.from_template(template)
     # llm = ChatOpenAI(temperature=0)
-    llm = ChatGroq(model="Llama3-70b-8192", temperature=0,  groq_api_key="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")
+    llm = ChatGroq(model="Llama3-70b-8192", temperature=0,  groq_api_key=grog_api_key)
 
 
     def get_schema(_):
