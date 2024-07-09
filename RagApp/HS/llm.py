@@ -19,7 +19,6 @@ from langchain.chains.combine_documents.stuff import StuffDocumentsChain # added
 from langchain_core.load.serializable import Serializable
 import os
 import pinecone
-from langchain_cohere import CohereEmbeddings
 from langchain_community.document_loaders.csv_loader import CSVLoader, UnstructuredCSVLoader
 from langchain_experimental.agents.agent_toolkits import create_csv_agent
 import logging
@@ -37,7 +36,7 @@ load_dotenv()
 openai_api_key = os.getenv('OPENAI_API_KEY')
 pinecone_api_key = os.getenv('PINECONE_API_KEY')
 
-grog_api_key = os.getenv('GROG_API_KEY')
+groq_api_key = os.getenv('GROQ_API_KEY')
 cohere_api_key = os.getenv('COHERE_API_KEY')
 
 
@@ -109,7 +108,7 @@ def get_openai_llm():
         llm (ChatOpenAI): An instance of the OpenAI language model for the LLM interface.
     """
     # llm = ChatOpenAI(temperature=0)
-    llm = ChatGroq(model="Llama3-70b-8192", temperature=0, groq_api_key=grog_api_key)
+    llm = ChatGroq(model="Llama3-70b-8192", temperature=0, groq_api_key=groq_api_key)
 
 
     return llm
@@ -173,7 +172,7 @@ def get_response_llm(llm, vector_store, question, file_id, chat_history:list, me
         "chat_history":chat_history
         })
 
-    return answer
+    return answer.choices[0].message.content
 
 
 

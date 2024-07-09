@@ -26,6 +26,7 @@ from rest_framework import status
 from django.http import HttpResponse
 from django.contrib import messages
 import logging
+from django.core.cache import cache
 
 logger = logging.getLogger(__name__)
 
@@ -218,13 +219,13 @@ class QueryDatabaseView(APIView):
                     # Recreate the SQLDatabase object from session parameters
                     db = init_database(**db_params)
 
-                    chat_history = request.session.get('chat_history', [])
+                    chat_history = cache.get(f'chat_history_{request.user.id}', [])
                     chat_history = chat_history[-5:]
                     answer = get_response(question, db, chat_history)
 
                     chat_history.append((question, answer))
+                    cache.set(f'chat_history_{request.user.id}', chat_history, timeout=3600)
 
-                    request.session['chat_history'] = chat_history
                     return Response({'status': 'success', 'response': answer})
                 except Exception as e:
                     return Response({'status': 'error', 'message': f'Error executing query: {e}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
