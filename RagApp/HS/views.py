@@ -196,7 +196,8 @@ class DatabaseConnectionView(LoginRequiredMixin,APIView):
                     'database': database
                 }
                 # Inform user about successful connection
-
+                
+                db = init_database(user, password, host, port, database)
                 return Response({'status': 'success', 'message': 'Connection Successful!'})
                 message.success(request, "successful")
             except Exception as e:
