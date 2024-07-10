@@ -14,12 +14,17 @@ from langchain_groq import ChatGroq
 from langchain_core.output_parsers import BaseOutputParser
 from sqlalchemy import create_engine
 from sqlalchemy.pool import QueuePool
+from langchain_anthropic import ChatAnthropic
+from langchain_cohere import CohereEmbeddings,  ChatCohere
+
 
 
 from dotenv import load_dotenv
 load_dotenv()
 
-groq_api_key = os.getenv('GROQ_API_KEY')
+cohere_api_key = os.getenv('COHERE_API_KEY')
+anthropic_api_key = os.getenv('ANTHROPIC_API_KEY')
+api_key = os.getenv('GROQ_API_KEY')
 
 class Commaseperatedoutput(BaseOutputParser):
     def parse(self, text:str):
@@ -39,14 +44,8 @@ def get_sql_chain(db):
         Based on the table schema below, write a SQL query that would answer the users's question and give the user the answer to the question he or she has asked, Take the conversation history into account.
         make sure for each question youre asked look at the previous question the user has asked in the chat history incase the user has asked a follow up question as regard to the previous question. 
         You do not have to show the SQL query you ran to get the response.
-        before you answer any questions, think deep, think deeply 
-        and take not of spacing in your response. take note of new lines and give a well structured response in your answers .
-        do not give jampackked answers.
-        Also note that it is important that you respond in markdown format when necessary, and ignore the hash symbols.
-        Include headings with bold text when dealing with responses the requires that.
-        when listing out items make sure you list each item in seperate lines to achieve a well structured answer.
-        make sure you display a well structured answer for the user or the viewer to be able to understand what he or she is reading.
-        Respond in Rich Text format
+        before you answer any questions, think deep, think deeply.
+        Based on the table schema below, question, sql query and sql response, write a natural language reponse.
 
 
 
@@ -73,7 +72,18 @@ def get_sql_chain(db):
         """
     prompt = ChatPromptTemplate.from_template(template)
     # llm = ChatOpenAI(temperature=0)
-    llm = ChatGroq(model="Llama3-8b-8192", temperature=0,  groq_api_key=groq_api_key)
+    # llm = ChatGroq(model="Llama3-8b-8192", temperature=0)
+    # llm = ChatAnthropic(model="claude-3-opus-20240229", temperature=0,  api_key=anthropic_api_key)
+
+    llm = ChatCohere(
+    model="command-r-plus",
+    temperature=0,
+    max_tokens=None,
+    timeout=None,
+    max_retries=2,
+    # other params...
+    )
+
 
 
     def get_schema(_):
@@ -92,14 +102,10 @@ def get_response(user_question:str, db:SQLDatabase, chat_history:list):
 
     template = """
        You are a data analyst at a company, you are interacting with a user who is asking you questions about the company's database.
-       when you are asked a question give a definite answer and do not hallucinate reponses. and also repond with the answer you get from the SQL query you run
+       when you are asked a question give a definite answer and do not hallucinate reponses. and also repond with the answer you get from the SQL query you run.
+       You do not have to show the SQL query you ran to get the response .
+       Make sure to take the chat history to note
        Based on the table schema below, question, sql query and sql response, write a natural language reponse.
-       You do not have to show the SQL query you ran to get the response 
-       Avoid using markdown or HTML formatting in your response.
-       Include headings with bold text when dealing with responses the requires that.
-       when listing out items make sure you list each item in seperate lines to achieve a well structured answer.
-       make sure you display a well structured answer for the user or the viewer to be able to understand what he or she is reading.
-       Respond in Rich Text format
 
 
        Conversation history: {chat_history}
@@ -109,7 +115,16 @@ def get_response(user_question:str, db:SQLDatabase, chat_history:list):
     
     prompt = ChatPromptTemplate.from_template(template)
     # llm = ChatOpenAI(temperature=0)
-    llm = ChatGroq(model="llama3-70b-8192", temperature=0, groq_api_key="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")
+    # llm = ChatGroq(model="llama3-70b-8192", temperature=0, groq_api_key="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")
+
+    llm = ChatCohere(
+    model="command-r-plus",
+    temperature=0,
+    max_tokens=None,
+    timeout=None,
+    max_retries=2,
+    # other params...
+    )
 
     chain = (
         RunnablePassthrough.assign(query=sql_chain).assign(

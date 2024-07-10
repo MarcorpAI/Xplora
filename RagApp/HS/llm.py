@@ -26,7 +26,7 @@ from langchain_community.utilities import SQLDatabase
 from langchain_community.docstore.document import Document
 from langchain_groq import ChatGroq
 from langchain.output_parsers.structured import StructuredOutputParser, ResponseSchema
-from langchain_cohere import CohereEmbeddings
+from langchain_cohere import CohereEmbeddings,  ChatCohere
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -110,7 +110,16 @@ def get_openai_llm():
         llm (ChatOpenAI): An instance of the OpenAI language model for the LLM interface.
     """
     # llm = ChatOpenAI(temperature=0)
-    llm = ChatGroq(model="Llama3-70b-8192", temperature=0, groq_api_key=groq_api_key)
+    # llm = ChatGroq(model="Llama3-70b-8192", temperature=0, groq_api_key=groq_api_key)
+
+    llm = ChatCohere(
+    model="command-r-plus",
+    temperature=0,
+    max_tokens=None,
+    timeout=None,
+    max_retries=2,
+    # other params...
+    )
 
 
     return llm
@@ -174,7 +183,7 @@ def get_response_llm(llm, vector_store, question, file_id, chat_history:list, me
         "chat_history":chat_history
         })
 
-    return answer.choices[0].message.content
+    return answer
 
 
 
