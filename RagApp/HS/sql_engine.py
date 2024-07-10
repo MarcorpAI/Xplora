@@ -29,7 +29,7 @@ class Commaseperatedoutput(BaseOutputParser):
 
 
 def init_database(user:str, password:str, host:str, port:str, database:str) -> SQLDatabase:
-    db_uri = f"mysql+mysqlconnector://{user}:{password}@{host}:{port}/{database}"
+    db_uri = f"mysql+mysqlconnector://{user}:{password}@{host}:{port}/{database}?ssl_ca=path/to/ca-cert.pem"
     return SQLDatabase.from_uri(db_uri)
 
 
