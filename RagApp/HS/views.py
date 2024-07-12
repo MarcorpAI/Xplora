@@ -314,3 +314,7 @@ class QueryPostgres(APIView):
                 return Response({'status': 'error', 'message': 'No active database connection.'}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response({'status': 'error', 'message': 'Invalid form data.'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+def docs_view(request):
+    return render(request, "HS/docs.html", {})

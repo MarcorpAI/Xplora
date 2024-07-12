@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MySQL Remote Connection Guide</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2, h3, h4 {
+            color: #333;
+        }
+        ul, ol {
+            margin: 0 0 20px 20px;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border-left: 4px solid #333;
+            overflow: auto;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007BFF;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Enabling Remote Connections and Obtaining Connection Details for Your MySQL Database</h2>
+        <h3>Prerequisites</h3>
+        <ul>
+            <li>MySQL server installed on a Windows machine.</li>
+            <li>Administrative access to the server.</li>
+            <li>MySQL client tool (e.g., MySQL Workbench) for database management.</li>
+            <li>Firewall configuration privileges.</li>
+        </ul>
+        <h3>Step-by-Step Guide</h3>
+        <h4>1. Edit MySQL Configuration File</h4>
+        <ol>
+            <li>Locate the MySQL configuration file (<code>my.ini</code>). By default, it is located in the MySQL installation directory, e.g., <code>C:\ProgramData\MySQL\MySQL Server 8.0\my.ini</code>.</li>
+            <li>Open <code>my.ini</code> in a text editor like Notepad.</li>
+            <li>Find the line starting with <code>bind-address</code> and change its value to <code>0.0.0.0</code>. If the line doesn’t exist, add it under the <code>[mysqld]</code> section:
+                <pre><code>[mysqld]
+bind-address = 0.0.0.0</code></pre>
+            </li>
+            <li>Save the changes and restart the MySQL service:
+                <pre><code>net stop mysql
+net start mysql</code></pre>
+            </li>
+        </ol>
+        <h4>2. Grant Remote Access to a User</h4>
+        <ol>
+            <li>Open the MySQL command line client or any MySQL client tool.</li>
+            <li>Log in as the root user or any user with sufficient privileges:
+                <pre><code>mysql -u root -p</code></pre>
+            </li>
+            <li>Grant remote access to a user:
+                <pre><code>GRANT ALL PRIVILEGES ON database_name.* TO 'user_name'@'%' IDENTIFIED BY 'password';
+FLUSH PRIVILEGES;</code></pre>
+            </li>
+        </ol>
+        <h4>3. Configure Windows Firewall</h4>
+        <ol>
+            <li>Open Windows Firewall with Advanced Security (<code>wf.msc</code>).</li>
+            <li>Click on <code>Inbound Rules</code> and then <code>New Rule</code>.</li>
+            <li>Select <code>Port</code> and click <code>Next</code>.</li>
+            <li>Select <code>TCP</code> and specify the port number <code>3306</code>.</li>
+            <li>Choose <code>Allow the connection</code> and proceed.</li>
+            <li>Select when the rule applies (e.g., Domain, Private, Public).</li>
+            <li>Give the rule a name (e.g., <code>MySQL Port 3306</code>) and finish the wizard.</li>
+        </ol>
+        <h4>4. Verify Remote Connection</h4>
+        <ol>
+            <li>From a remote machine, use the MySQL client to connect to the MySQL server:
+                <pre><code>mysql -u user_name -h server_ip_address -p</code></pre>
+            </li>
+        </ol>
+        <h3>Troubleshooting</h3>
+        <ul>
+            <li>Ensure the MySQL server is running.</li>
+            <li>Verify the firewall settings allow traffic on port 3306.</li>
+            <li>Check the MySQL user has the correct privileges for remote access.</li>
+            <li>Confirm the IP address is correctly specified in the connection command.</li>
+        </ul>
+        <h3>Obtaining Connection Details</h3>
+        <p>Once you have enabled remote access and verified the connection, you will need the following details to connect your MySQL database to the web app:</p>
+        <ul>
+            <li>**Database Name:** The name of your database.</li>
+            <li>**Username:** The username with remote access privileges.</li>
+            <li>**Password:** The password for the username.</li>
+            <li>**Server IP Address:** The IP address of your MySQL server.</li>
+            <li>**Port Number:** The port number (default is 3306).</li>
+        </ul>
+        <a href="{% url "db_connect" %}" class="button">Ask Database</a>
+    </div>
+</body>
+</html>
