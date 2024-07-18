@@ -3,11 +3,8 @@
 {% load static %}
 {% block content %}
 <div class="main-box">
-    <div class="main-box-layer">
-
+    <div class="main-box-layer">        
         <div class="chat-box">
-            {% comment %} <div id="output">
-            </div> {% endcomment %}
 
             <div class="chat-box-layer" id="chatLayer">
                 <label for="file-input">
@@ -16,24 +13,17 @@
                         <div class="spinner"></div>
                         <span>Uploading file...</span>
                     </div>
-                    <div id="file-upload" class="file-upload-box">
-                        <span class="file-name" id="fileNames"></span>
-                        {% comment %} <h4 class='chat-title'>Upload DOCX Files</h4> {% endcomment %}
-                        
-
+                    <div class="file-upload-box">
                         <label for="file-input">
-                            <i class="fi fi-tr-document-signed"></i>
+                          <i class="fi fi-tr-document-signed"></i>
                         </label>
-
-                        <div class="upload-text">
-                            <p>Click to Select file</p>
-                        </div>
-
                         <input type="file" id="file-input" name="file_content">
-
-                        <button id="upload-btn"><span class="btn-text">Upload File</span> <span class="loader"></span> </button>
-
-                    </div>
+                        <div class="upload-text">
+                          <p  id="upload-text-content">Click to select  file to upload</p> <!-- Empty by default, updated dynamically -->
+                          <p>If file name doesnt appear, click upload</p>
+                        </div>
+                        <button id="upload-btn"><span class="btn-text">Upload File</span> <span class="loader"></span></button>
+                      </div>
                 </label>
             </div>
 
@@ -79,8 +69,6 @@
                 <p>MarcorpAI may display inaccurate info, so verify its responses.</p>
             </div>
         </div>
-
-
         {% csrf_token %}
         <script src="{% static 'js/scripts.js' %}"></script>
 

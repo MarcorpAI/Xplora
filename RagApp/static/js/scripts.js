@@ -5,11 +5,32 @@ document.addEventListener("DOMContentLoaded", function () {
   const queryInput = document.getElementById("query-input");
   const queryBtn = document.getElementById("query-btn");
   const chatLog = document.getElementById("chat-log");
-  const name = document.getElementById("fileName");
   let csrftokenmiddlewaretoken = document.querySelector("input[type=hidden]");
   const csrfToken = csrftokenmiddlewaretoken ? csrftokenmiddlewaretoken.value : null;
   console.log(csrfToken);
   let showTimeout, hideTimeout;
+
+  fileInput.addEventListener('change', function() {
+    console.log("File input changed"); // Debug log
+    const uploadTextContent = document.getElementById('upload-text-content');
+    
+    if (this.files && this.files.length > 0) {
+      const fileName = this.files[0].name;
+      console.log("Selected file:", fileName); // Debug log
+      
+      if (uploadTextContent) {
+        uploadTextContent.textContent = 'Selected file: ' + fileName;
+        console.log("uploadTextContent updated to:", uploadTextContent.textContent); // Debug log
+      } else {
+        console.log("uploadTextContent element not found"); // Debug log
+      }
+    } else {
+      console.log("No file selected"); // Debug log
+      if (uploadTextContent) {
+        uploadTextContent.textContent = 'Click to Select file';
+      }
+    }
+  });
 
   uploadBtn.addEventListener("click", () => {
     const file = fileInput.files[0];

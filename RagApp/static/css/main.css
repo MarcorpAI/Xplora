@@ -499,6 +499,16 @@ header .image-text .header-text{
 }
 
 
+
+
+#file-name-display, #fileNames {
+    display: block;
+    margin-top: 10px;
+    font-style: italic;
+    color: #666;
+}
+
+
 /* Style the input fields */
 #connection-form input[type=text],
 #connection-form input[type=password] {
@@ -624,9 +634,18 @@ header .image-text .header-text{
     justify-content: space-between;
 }
 
-#file-upload-box {
-    display: none;
+
+
+
+#upload-text-content {
+    font-size: 0.9rem;
+    text-align: center;
+    font-weight: 300;
+    margin: 0;
+    word-break: break-word;
 }
+
+
 
 .file-upload-close-box {
     /* display: none; */
@@ -644,6 +663,8 @@ header .image-text .header-text{
     font-size: 1.2rem;
     color: #caccce;
 }
+
+
 
 .prompt-file-box-layer {}
 

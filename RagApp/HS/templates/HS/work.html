@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "HS/base.html" %}
 
 {% load static %}
 {% block content %}
@@ -19,19 +19,9 @@
                     </div>
                     <div id="file-upload" class="file-upload-box">
                         <span class="file-name" id="fileNames"></span>
-                        {% comment %} <h4 class='chat-title'>Upload DOCX Files</h4> {% endcomment %}
-                        
 
-                        <label for="file-input">
-                            <i class="fi fi-tr-document-signed"></i>
-                        </label>
-
-                        <div class="upload-text">
-                            <p> Select or drag a file here. </p>
-                        </div>
 
                         <input type="file" id="file-input" name="file_content" accept=".csv">
-
                         <button id="upload-btn"><span class="btn-text">Upload File</span> <span class="loader"></span> upload file</button>
                     </div>
                 </label>
