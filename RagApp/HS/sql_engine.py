@@ -71,18 +71,9 @@ def get_sql_chain(db):
     
         """
     prompt = ChatPromptTemplate.from_template(template)
-    # llm = ChatOpenAI(temperature=0)
+    llm = ChatOpenAI(temperature=0, model="gpt-4o", timeout=None)
     # llm = ChatGroq(model="Llama3-8b-8192", temperature=0)
     # llm = ChatAnthropic(model="claude-3-opus-20240229", temperature=0,  api_key=anthropic_api_key)
-
-    llm = ChatCohere(
-    model="command-r-plus",
-    temperature=0,
-    max_tokens=None,
-    timeout=None,
-    max_retries=2,
-    # other params...
-    )
 
 
 
@@ -117,14 +108,7 @@ def get_response(user_question:str, db:SQLDatabase, chat_history:list):
     # llm = ChatOpenAI(temperature=0)
     # llm = ChatGroq(model="llama3-70b-8192", temperature=0, groq_api_key="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")
 
-    llm = ChatCohere(
-    model="command-r-plus",
-    temperature=0,
-    max_tokens=None,
-    timeout=None,
-    max_retries=2,
-    # other params...
-    )
+    llm = ChatOpenAI(temperature=0, model="gpt-4o", timeout=None)
 
     chain = (
         RunnablePassthrough.assign(query=sql_chain).assign(

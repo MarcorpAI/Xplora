@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
       console.log("Selected file:", fileName); // Debug log
       
       if (uploadTextContent) {
-        uploadTextContent.textContent = 'Selected file: ' + fileName;
+        uploadTextContent.textContent = fileName;
         console.log("uploadTextContent updated to:", uploadTextContent.textContent); // Debug log
       } else {
         console.log("uploadTextContent element not found"); // Debug log

@@ -86,8 +86,8 @@ def get_embeddings(docs, metadata_filter=None):
 
     vector_store = PineconeVectorStore.from_documents(
         docs,
-        embedding=CohereEmbeddings(cohere_api_key=cohere_api_key),
-        index_name='marcorpai',
+        embedding=OpenAIEmbeddings(model="text-embedding-3-large"),
+        index_name='production-vector',
     )
 
     return vector_store
@@ -109,17 +109,10 @@ def get_openai_llm():
     Returns:
         llm (ChatOpenAI): An instance of the OpenAI language model for the LLM interface.
     """
-    # llm = ChatOpenAI(temperature=0)
+    llm = ChatOpenAI(temperature=0, model="gpt-4o", timeout=None)
     # llm = ChatGroq(model="Llama3-70b-8192", temperature=0, groq_api_key=groq_api_key)
 
-    llm = ChatCohere(
-    model="command-r-plus",
-    temperature=0,
-    max_tokens=None,
-    timeout=None,
-    max_retries=2,
-    # other params...
-    )
+ 
 
 
     return llm
