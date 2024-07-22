@@ -5,9 +5,9 @@ from .settings import BASE_DIR
 
 
 SECRET_KEY = os.environ["SECRET_KEY"]
-ALLOWED_HOSTS = [os.environ["WEBSITE_HOSTNAME"]]
+ALLOWED_HOSTS = ['webapp.marcorpai.app']
 
-CSRF_TRUSTED_ORIGINS = ["https://"+os.environ["WEBSITE_HOSTNAME"]]
+CSRF_TRUSTED_ORIGINS = ["https://webapp.marcorpai.app"]
 
 DEBUG = False
 
@@ -28,7 +28,7 @@ MIDDLEWARE = [
 
 
 CORS_ALLOWED_ORIGINS = [
-    "https://marcorp.azurewebsites.net",
+    "https://webapp.marcorpai.app",
 ]
 
 
@@ -82,3 +82,58 @@ DATABASES = {
         "PASSWORD": parameters['password'],
     }
 }
+
+
+
+
+
+
+SOCIALACCOUNT_PROVIDERS = {
+    "google":{
+        "PROCESS":'login_direct',
+        "METHOD":"oauth2",
+        "ADAPTER_CLASS":'HS.adapters.CustomSocialAccountAdapter',
+        "SCOPE":[
+            "profile",
+            "email"
+        ],
+        "AUTH_PARAMS":{"access_type":"online"}
+    },
+    "github":{
+        "PROCESS":'login_direct',
+        "SCOPE":[
+            "user",
+            "repo"
+        ]
+    }
+}
+
+
+SITE_ID = 2
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+# Configuration for allauth
+ACCOUNT_SESSION_REMEMBER = True
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+# ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_EMAIL_VERIFICATION = 'optional'
+SOCIALACCOUNT_AUTO_SIGNUP = True
+
+SOCIALACCOUNT_LOGIN_ON_GET=True
+
+
+SOCIALACCOUNT_ADAPTER = 'HS.adapters.CustomSocialAccountAdapter'
+
+
+
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]

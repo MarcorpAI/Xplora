@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const fileUploadSpinner = document.getElementById("file-upload-spinner");
       fileUploadSpinner.style.display = "flex";
 
-      fetch("https://marcorp.azurewebsites.net/askdatabase/", {
+      fetch("https://webapp.marcorpai.app/askdatabase/", {
           method: "POST",
           body: formData,
           headers: {
@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const llmTypingSpinner = document.getElementById("llm-typing-spinner");
       llmTypingSpinner.style.display = 'flex';
 
-      fetch("https://marcorp.azurewebsites.net/query/",{
+      fetch("https://webapp.marcorpai.app/query/",{
         method: "POST",
         body: formData,
         headers: {
