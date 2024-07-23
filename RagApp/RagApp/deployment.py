@@ -5,9 +5,9 @@ from .settings import BASE_DIR
 
 
 SECRET_KEY = os.environ["SECRET_KEY"]
-ALLOWED_HOSTS = [os.environ["WEBSITE_HOST_NAME"]]
+ALLOWED_HOSTS = [os.environ["WEBSITE_HOSTNAME"]]
 
-CSRF_TRUSTED_ORIGINS = ["https://"+os.environ["WEBSITE_HOST_NAME"]]
+CSRF_TRUSTED_ORIGINS = ["https://"+os.environ["WEBSITE_HOSTNAME"]]
 
 DEBUG = False
 
