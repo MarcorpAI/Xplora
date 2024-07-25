@@ -29,6 +29,7 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "https://marcorp.azurewebsites.net",
+    "https://webapp.marcorp.app",
 ]
 
 
