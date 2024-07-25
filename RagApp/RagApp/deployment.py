@@ -4,10 +4,26 @@ from .settings import BASE_DIR
 
 
 
-SECRET_KEY = os.environ["SECRET_KEY"]
-ALLOWED_HOSTS = [os.environ["WEBSITE_HOST_NAME"]]
+CUSTOM_DOMAIN = os.environ.get("CUSTOM_DOMAIN", "")
+SECRET_KEY = os.environ.get("SECRET_KEY")
+WEBSITE_HOSTNAME = os.environ.get("WEBSITE_HOSTNAME", "")
 
-CSRF_TRUSTED_ORIGINS = ["https://"+os.environ["WEBSITE_HOST_NAME"]]
+ALLOWED_HOSTS = [WEBSITE_HOSTNAME]
+if CUSTOM_DOMAIN:
+    ALLOWED_HOSTS.append(CUSTOM_DOMAIN)
+
+
+
+
+
+CSRF_TRUSTED_ORIGINS = [
+    f"https://{os.environ.get('WEBSITE_HOSTNAME', '')}",
+    f"http://{os.environ.get('WEBSITE_HOSTNAME', '')}",
+    f"https://{CUSTOM_DOMAIN}",
+    f"http://{CUSTOM_DOMAIN}"
+]
+
+
 
 DEBUG = False
 
