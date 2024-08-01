@@ -27,6 +27,11 @@ from django.http import HttpResponse
 from django.contrib import messages
 import logging
 from django.core.cache import cache
+from rest_framework.permissions import IsAuthenticated
+from django.template.context_processors import csrf
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth import authenticate
+
 
 logger = logging.getLogger(__name__)
 
@@ -105,9 +110,14 @@ def ingest_file(file_path, file_extension):
 
 
 
+
+
+
+
 class UploadView(LoginRequiredMixin, APIView):
     template_name = 'HS/excel1.html'
     redirect_field_name = 'next'
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         return render(request, self.template_name)
@@ -134,6 +144,7 @@ class UploadView(LoginRequiredMixin, APIView):
 
 class QueryFile(APIView):
     # @method_decorator(require_POST)
+    permission_classes = [IsAuthenticated]
     def post(self, request):
         document = request.FILES.get('file_content')
         query = request.POST.get('question')
@@ -171,6 +182,7 @@ class QueryFile(APIView):
 class DatabaseConnectionView(LoginRequiredMixin,APIView):
     redirect_field_name = 'next'
     template_name = 'HS/connect_database.html'
+    permission_classes = [IsAuthenticated]
 
 
     def get(self, request):
@@ -197,7 +209,7 @@ class DatabaseConnectionView(LoginRequiredMixin,APIView):
                 }
                 # Inform user about successful connection
                 
-                db = init_database(user, password, host, port, database)
+                # db = init_database(user, password, host, port, database)
                 return Response({'status': 'success', 'message': 'Connection Successful!'})
                 message.success(request, "successful")
             except Exception as e:
@@ -209,6 +221,7 @@ class DatabaseConnectionView(LoginRequiredMixin,APIView):
 
 
 class QueryDatabaseView(APIView):
+    permission_classes = [IsAuthenticated]
     def post(self, request):
         query_form = UserQueryForm(request.POST)
         if query_form.is_valid():
@@ -252,6 +265,7 @@ class QueryDatabaseView(APIView):
 class PostgreSQLView(LoginRequiredMixin,APIView):
     redirect_field_name = 'next'
     template_name = 'HS/postgres.html'
+    permission_classes = [IsAuthenticated]
 
 
     def get(self, request):
@@ -289,6 +303,7 @@ class PostgreSQLView(LoginRequiredMixin,APIView):
 
 
 class QueryPostgres(APIView):
+    permission_classes = [IsAuthenticated]
     def post(self, request):
         query_form = UserQueryForm(request.POST)
         if query_form.is_valid():

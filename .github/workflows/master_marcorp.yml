@@ -67,8 +67,12 @@ jobs:
           python RagApp/manage.py tailwind build
 
 
-      - name: Run collectstatic
-        run: python RagApp/manage.py collectstatic --noinput
+      - name: Run collectstatic and migrate
+        run: |
+          python RagApp/manage.py collectstatic --noinput
+          python RagApp/manage.py migrate
+
+
         
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
