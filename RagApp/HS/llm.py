@@ -30,6 +30,7 @@ from langchain_cohere import CohereEmbeddings,  ChatCohere
 
 logging.basicConfig(level=logging.DEBUG)
 
+
 load_dotenv()
 
 # Initialize OpenAI embeddings
