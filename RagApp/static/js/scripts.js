@@ -173,7 +173,7 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
       const errorMessage = document.createElement("div");
       errorMessage.classList.add("assistant-message");
-      errorMessage.textContent = "Please enter a question.";
+      errorMessage.textContent = "Error! Please Ensure file was uploaded sucessfully";
       chatLog.appendChild(errorMessage);
       chatLog.scrollTop = chatLog.scrollHeight; // Scroll to the bottom of the chat log
     }
