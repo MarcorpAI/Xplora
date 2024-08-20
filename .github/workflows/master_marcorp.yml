@@ -50,6 +50,8 @@ jobs:
       
       - name: Install dependencies
         run: | 
+          python -m pip install --upgrade pip
+          pip cache purge
           pip install --no-cache-dir -r requirements.txt
           cd RagApp/theme/static_src
           npm install
