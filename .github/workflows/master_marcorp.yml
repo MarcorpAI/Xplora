@@ -51,7 +51,7 @@ jobs:
       - name: Generate requirements.txt
         run: |
           pip install pip-tools
-          pip-compile > requirements.txt
+          pip-compile requirements.in
       
       - name: Install dependencies
         run: | 
