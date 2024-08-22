@@ -108,7 +108,7 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 SESSION_COOKIE_NAME = 'sessionid'
 
 SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
-SECURE_SSL_REDIRECT = True  # in production
+# SECURE_SSL_REDIRECT = True  
 SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_HTTPONLY = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
