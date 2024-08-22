@@ -31,6 +31,8 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.template.context_processors import csrf
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
+from django.views.generic import TemplateView
+
 
 
 logger = logging.getLogger(__name__)
@@ -47,13 +49,9 @@ and the second view handles the file interaction. when a file upload is successf
  
 
 # index page view - added this index page
-class IndexView(APIView):
-    permission_classes = [AllowAny]
+class IndexView(TemplateView):
     template_name = 'HS/index.html'
-    redirect_field_name = 'next'
 
-    def get(self, request):
-        return TemplateResponse(request, self.template_name)
 
 
 
